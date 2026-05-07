@@ -1,0 +1,48 @@
+# ==========================================
+# Core Machine Learning Libraries
+# ==========================================
+numpy
+pandas
+scikit-learn
+joblib
+
+# ==========================================
+# API & Backend
+# ==========================================
+fastapi
+uvicorn
+httpx
+
+# ==========================================
+# MLOps & Experiment Tracking
+# ==========================================
+mlflow
+dvc
+dvc[s3]
+dagshub
+
+# ==========================================
+# Monitoring & Observability
+# ==========================================
+prometheus-fastapi-instrumentator
+
+# ==========================================
+# Development & Testing
+# ==========================================
+pytest
+pylint
+flake8
+
+# ==========================================
+# Containerization
+# ==========================================
+docker
+
+# ==========================================
+# Utilities
+# ==========================================
+python-dotenv
+dataclasses-json
+diskcache
+dnspython
+distro

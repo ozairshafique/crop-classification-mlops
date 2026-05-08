@@ -1,0 +1,5 @@
+outs:
+- md5: e8b82c1adace83b8b96adddcfb040862
+  size: 144866
+  hash: md5
+  path: Crop_Recommendation.csv

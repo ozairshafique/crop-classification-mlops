@@ -1,0 +1,27 @@
+[flake8]
+max-line-length = 88
+max-complexity = 10
+
+ignore =
+    E501,
+    W503,
+    E203
+
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    .dvc,
+    venv,
+    env,
+    notebooks,
+    docs,
+    *.egg-info
+
+per-file-ignores =
+    __init__.py: F401
+    test_*.py: E501
+
+statistics = True
+count = True

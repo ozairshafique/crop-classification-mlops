@@ -1,0 +1,62 @@
+schema: '2.0'
+stages:
+  process_data:
+    cmd: python src/data/make_dataset.py data/raw/Crop_Recommendation.csv data/processed
+    deps:
+    - path: data/raw/Crop_Recommendation.csv
+      hash: md5
+      md5: e8b82c1adace83b8b96adddcfb040862
+      size: 144866
+    - path: src/data/make_dataset.py
+      hash: md5
+      md5: 754c28c3a05904627b994494f8532f2a
+      size: 2266
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: b463ad3a7428f58c3334206831eeaf52
+      size: 29079
+    - path: data/processed/train.csv
+      hash: md5
+      md5: c346797cb54b71d98acddb28a3f5324b
+      size: 115862
+  train_model:
+    cmd: python src/models/train_model.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: c346797cb54b71d98acddb28a3f5324b
+      size: 115862
+    - path: src/models/train_model.py
+      hash: md5
+      md5: 01664611d7037425df56695ba7ebcb71
+      size: 2254
+    outs:
+    - path: models/label_encoder.pkl
+      hash: md5
+      md5: dbb73fe8751d050f32b492e8d3570ffc
+      size: 829
+    - path: models/model.pkl
+      hash: md5
+      md5: 10cf0dea74e367f7d352d3733afca484
+      size: 104845
+  evaluate:
+    cmd: python src/models/evaluate.py
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: b463ad3a7428f58c3334206831eeaf52
+      size: 29079
+    - path: models/model.pkl
+      hash: md5
+      md5: 10cf0dea74e367f7d352d3733afca484
+      size: 104845
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: a3e9f3b2d091484793cb5d146008d81f
+      size: 3018
+    outs:
+    - path: models/metrics.json
+      hash: md5
+      md5: b24fbb46ac5a78f86a694a6668cad0f7
+      size: 71

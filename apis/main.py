@@ -1,4 +1,3 @@
-
 """ FastAPI application for crop classification """
 
 import json
@@ -11,6 +10,7 @@ from prometheus_client import Counter, Summary
 from sklearn.ensemble import RandomForestClassifier
 from prometheus_fastapi_instrumentator import Instrumentator
 from .schemas import CropFeatures, PerformanceMetrics, PredictionResponse
+from pydantic import BaseModel
 
 app = FastAPI(
     title="Crop Classification API",
@@ -118,7 +118,7 @@ def predict(crop_input: CropFeatures):
     """Predict the most suitable crop based on input features """
     REQUEST_COUNT.inc()
     try:
-        input_data = pd.DataFrame([crop_input.dict()])
+        input_data = pd.DataFrame([crop_input.model_dump()])
         prediction = model.predict(input_data)
         predicted_crop = label_encoder.inverse_transform(prediction)[0]
         return PredictionResponse(

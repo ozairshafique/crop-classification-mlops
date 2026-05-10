@@ -1,0 +1,16 @@
+.git
+.dvc
+__pycache__
+*.pyc
+.env
+envs
+venv
+mlruns/
+*.pkl
+.pytest_cache
+.gitignore
+notebooks/
+reports/
+tests/
+
+

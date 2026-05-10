@@ -31,7 +31,8 @@ MLFLOW_TRACKING_URI = os.getenv(
     "http://localhost:5000"
 )
 DAGSHUB_USERNAME = os.getenv('DAGSHUB_USERNAME')
-DAGSHUB_REPO =  os.getenv('DAGSHUB_REPO')
+DAGSHUB_REPO = os.getenv('DAGSHUB_REPO')
+
 
 def setup_mlflow():
     if "dagshub" in MLFLOW_TRACKING_URI:
@@ -66,7 +67,9 @@ def train():
         try:
             # Load the processed data
             train_data = pd.read_csv('data/processed/train.csv')
-            logger.info(f"Training data loaded successfully with shape {train_data.shape}")
+            logger.info(
+                f"Training data loaded with shape {train_data.shape}"
+                )
 
         except FileNotFoundError as e:
             logger.error(f"Training data file not found: {e}")

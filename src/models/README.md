@@ -1,125 +1,251 @@
-# Model Card for Crop Classification Model
+# Model Card — Crop Classification Model
 
 ## Overview
 
-This model card provides essential information about the **Crop Classification Model** trained on the **Crop Classification Dataset**. The model predicts the best crop to plant based on environmental and soil data.
+This model card provides essential information about the
+**Crop Classification Model** trained to predict the most
+suitable crop based on soil and environmental conditions.
 
-### Key Information:
-
-- **Model Type**: RandomForestClassifier
-- **Version**: 1.0
-- **Input Features**: 7 numerical input features (Nitrogen, Phosphorus, Potassium, Temperature, Humidity, pH, Rainfall)
-- **Output**: Predicted crop category
+| Field              | Details                  |
+| ------------------ | ------------------------ |
+| **Model Type**     | Random Forest Classifier |
+| **Version**        | 2.0.0                    |
+| **Accuracy**       | 94.32%                   |
+| **Input Features** | 7 numerical features     |
+| **Output Classes** | 22 crop types            |
+| **Framework**      | Scikit-learn 1.5.1       |
+| **Tracking**       | MLflow + DagsHub         |
+| **Last Updated**   | May 2026                 |
 
 ---
 
-## Model Description
+## Objective
 
-### 1. **Objective**
+Assist farmers and agricultural professionals in choosing
+the most suitable crop based on soil and environmental
+conditions, reducing crop failure and improving yield.
 
-The objective of this model is to assist farmers and agricultural professionals in choosing the best crop to plant based on soil and environmental conditions.
+---
 
-### 2. **Input**
+## Input Features
 
-The model accepts the following input features:
+| Feature     | Description                | Unit  | Range |
+| ----------- | -------------------------- | ----- | ----- |
+| Nitrogen    | Nitrogen content in soil   | kg/ha | 0-140 |
+| Phosphorus  | Phosphorus content in soil | kg/ha | 0-145 |
+| Potassium   | Potassium content in soil  | kg/ha | 0-205 |
+| Temperature | Regional temperature       | °C    | 0-50  |
+| Humidity    | Regional humidity          | %     | 0-100 |
+| pH Value    | Soil acidity/alkalinity    | pH    | 0-14  |
+| Rainfall    | Regional rainfall          | mm    | 0-300 |
 
-| Feature     | Description                       | Units |
-| ----------- | --------------------------------- | ----- |
-| Nitrogen    | Nitrogen content in the soil      | kg/ha |
-| Phosphorus  | Phosphorus content in the soil    | kg/ha |
-| Potassium   | Potassium content in the soil     | kg/ha |
-| Temperature | Temperature of the region         | °C    |
-| Humidity    | Humidity level in the region      | %     |
-| pH Value    | Acidity or alkalinity of the soil | pH    |
-| Rainfall    | Rainfall in the region            | mm    |
+---
 
-### 3. **Output**
+## Output Classes
 
-The output of the model is a **predicted crop type**. The model outputs a recommended crop such as:
+22 crop types:
 
-- Rice
-- Maize
-- Cotton
-- Coffee
-- Jute
-- Coconut
-- Papaya
-- Orange
-- Apple
-- Muskmelon
-- Watermelon
-- Grapes
-- Mango
-- Banana
-- Pomegranate
-- Lentil
-- Blackgram
-- MungBean
-- MothBeans
-- PigeonPeas
-- KidneyBeans
-- ChickPea
+`Apple` `Banana` `Blackgram` `ChickPea` `Coconut`
+`Coffee` `Cotton` `Grapes` `Jute` `KidneyBeans`
+`Lentil` `Maize` `Mango` `MothBeans` `MungBean`
+`Muskmelon` `Orange` `Papaya` `PigeonPeas`
+`Pomegranate` `Rice` `Watermelon`
 
 ---
 
 ## Model Architecture
 
-- **Algorithm**: RandomForestClassifier
-- **Training Data Size**: 1760
-- **Hyperparameters**: Default parameters were used, including `n_estimators=50`, `max_depth=2`,`min_samples_splits=5` and `random_state=42`.
-- **Model Training**: The model was trained using Random Forest with an 80-20 train-test split.
+| Parameter         | Value                  |
+| ----------------- | ---------------------- |
+| Algorithm         | RandomForestClassifier |
+| n_estimators      | 200                    |
+| max_depth         | None                   |
+| min_samples_split | 2                      |
+| class_weight      | balanced               |
+| random_state      | 42                     |
+| Train/Test Split  | 80/20                  |
+| Training Samples  | 1760                   |
+| Test Samples      | 440                    |
 
 ---
 
 ## Performance Metrics
 
-The model was evaluated on the test set using the following metrics:
+### Version Comparison
 
-| Metric    | Value              |
-| --------- | ------------------ |
-| Accuracy  | 0.725              |
-| Precision | 0.8527403002240664 |
-| Recall    | 0.725              |
-| F1-Score  | 0.6601909594187447 |
+| Metric        | v1.0   | v2.0       | Improvement |
+| ------------- | ------ | ---------- | ----------- |
+| **Accuracy**  | 72.5%  | **94.32%** | +21.82%     |
+| **Precision** | 0.8527 | **0.9630** | +11.03%     |
+| **Recall**    | 0.7250 | **0.9432** | +21.82%     |
+| **F1-Score**  | 0.6601 | **0.9333** | +27.32%     |
+
+### Per Class Performance
+
+| Crop        | Precision | Recall | F1-Score | Support |
+| ----------- | --------- | ------ | -------- | ------- |
+| Apple       | 1.00      | 1.00   | 1.00     | 23      |
+| Banana      | 1.00      | 1.00   | 1.00     | 21      |
+| Blackgram   | 0.83      | 1.00   | 0.91     | 20      |
+| ChickPea    | 1.00      | 1.00   | 1.00     | 26      |
+| Coconut     | 1.00      | 1.00   | 1.00     | 27      |
+| Coffee      | 0.85      | 1.00   | 0.92     | 17      |
+| Cotton      | 1.00      | 1.00   | 1.00     | 17      |
+| Grapes      | 1.00      | 1.00   | 1.00     | 14      |
+| Jute        | 1.00      | 0.17   | 0.30     | 23      |
+| KidneyBeans | 1.00      | 1.00   | 1.00     | 20      |
+| Lentil      | 0.85      | 1.00   | 0.92     | 11      |
+| Maize       | 1.00      | 1.00   | 1.00     | 21      |
+| Mango       | 1.00      | 1.00   | 1.00     | 19      |
+| MothBeans   | 1.00      | 0.75   | 0.86     | 24      |
+| MungBean    | 1.00      | 1.00   | 1.00     | 19      |
+| Muskmelon   | 1.00      | 1.00   | 1.00     | 17      |
+| Orange      | 1.00      | 1.00   | 1.00     | 14      |
+| Papaya      | 1.00      | 1.00   | 1.00     | 23      |
+| PigeonPeas  | 1.00      | 1.00   | 1.00     | 23      |
+| Pomegranate | 1.00      | 1.00   | 1.00     | 23      |
+| Rice        | 0.54      | 1.00   | 0.70     | 19      |
+| Watermelon  | 1.00      | 1.00   | 1.00     | 19      |
+
+---
+
+## MLflow Experiment Tracking
+
+All experiments tracked on DagsHub:
+
+- 🔗 [View Experiments](https://dagshub.com/ushafique/CropClassification)
+- 20+ training and evaluation runs logged
+- Parameters, metrics and models versioned
+
+---
+
+## 🌱 Carbon Footprint
+
+### CodeCarbon Dashboard
+
+![Carbon Footprint](../../images/carbon-footprint.png)
+
+### Emissions Over Time
+
+![Emissions Chart](../../images/carbon-emissions-chart.png)
+
+### Energy Efficiency Label
+
+![Energy Label](../../images/carbon-energy-label.png)
+
+| Metric            | Value  |
+| ----------------- | ------ |
+| CO2 per Training  | 0.0 kg |
+| CO2 per Inference | 0.0 kg |
+| Model Size        | 104 kB |
+| Dataset Size      | 141 kB |
+| Energy Rating     | C      |
+| Infrastructure    | Italy  |
+
+Carbon tracking implemented using
+[CodeCarbon](https://codecarbon.io/).
+This project maintains minimal carbon footprint
+due to efficient model architecture and
+optimized inference pipeline.
 
 ---
 
 ## Fairness and Bias
 
-- **Class Imbalance**: Some crop types are underrepresented in the training data, which may lead to biased predictions. Consider rebalancing the dataset if deploying in production.
-- **Geographical Bias**: The model was trained on data from specific regions and may not generalize well to new, unseen regions.
+- **Class Imbalance**: Addressed using
+  `class_weight="balanced"` in Random Forest
+- **Geographical Bias**: Trained on specific
+  regional data — may not generalize to all regions
+- **Low Performing Classes**: Jute (F1=0.30)
+  and Rice (F1=0.70) need more training data
 
 ---
 
 ## Model Limitations
 
-- **Data Drift**: The model is sensitive to data drift caused by changing environmental conditions. We recommend monitoring data drift using Alibi Detect to ensure the model’s predictions remain accurate over time.
-- **Outliers**: The model may perform poorly if provided with extreme or outlier values for input features such as temperature or rainfall.
+- **Data Drift**: Sensitive to changing environmental
+  conditions — monitored using Alibi Detect
+- **Outliers**: May perform poorly with extreme
+  input values
+- **Regional**: Not validated for all global regions
+- **Jute**: Currently underperforming —
+  needs more data
 
 ---
 
-## Model Use Case
+## Intended Use
 
-- **Intended Use**: This model is intended to assist farmers in identifying the most suitable crop to grow, based on current soil and environmental factors.
-- **Out of Scope**: This model should not be used for precise crop yield predictions or in regions that are not represented in the dataset.
+| Use Case                          | Supported |
+| --------------------------------- | --------- |
+| Crop recommendation for farmers   | ✅ Yes    |
+| Agricultural decision support     | ✅ Yes    |
+| Real-time API predictions         | ✅ Yes    |
+| Crop yield prediction             | ❌ No     |
+| Unseen geographical regions       | ❌ No     |
+| Unmonitored production deployment | ❌ No     |
 
 ---
 
 ## Ethical Considerations
 
-- **Fairness**: Ensure that the model does not disproportionately benefit or disadvantage certain groups (e.g., small-scale farmers, certain regions).
-- **Data Privacy**: Use anonymized data if deploying in a real-world setting to protect personal or sensitive information.
+- **Fairness**: Should not disadvantage
+  small-scale farmers or specific regions
+- **Transparency**: All predictions via API
+- **Data Privacy**: No personal data collected
+- **Human Oversight**: Recommendations should
+  be verified by agricultural experts
 
-## Code Carbon
+---
 
-We use Code Carbon to monitor the environmental impact of running our machine learning models. Below, we present a detailed overview of the carbon emissions and energy consumption associated with specific model executions.
+## API Usage
 
-| Timestamp           | Project Name | Duration          | Emissions              | Emissions Rate         | CPU Power | GPU Power | RAM Power         |
-| ------------------- | ------------ | ----------------- | ---------------------- | ---------------------- | --------- | --------- | ----------------- |
-| 2024-09-19T19:09:24 | codecarbon   | 14.24550829999498 | 1.7599366653232822e-05 | 1.2354326909654057e-06 | 7.5       | 0.0       | 5.955403804779053 |
+```bash
+POST http://localhost:8000/predict
 
-![plots](../../reports/codecarbon/carbons_dashboards1.PNG)
+{
+    "Nitrogen": 50,
+    "Phosphorus": 30,
+    "Potassium": 40,
+    "Temperature": 20.0,
+    "Humidity": 60.0,
+    "pH_Value": 6.0,
+    "Rainfall": 100.0
+}
+```
 
-![plots](../../reports/codecarbon/carbons_dashboard.PNG)
+Response:
 
-![plots](../../reports/codecarbon/carbons_dashboard2.PNG)
+```json
+{
+  "predicted": "Rice",
+  "message": "Prediction successful"
+}
+```
+
+---
+
+## Version History
+
+| Version | Date     | Accuracy | Changes                                   |
+| ------- | -------- | -------- | ----------------------------------------- |
+| 1.0.0   | Sep 2024 | 72.5%    | Initial model                             |
+| 2.0.0   | May 2026 | 94.32%   | Improved hyperparameters, class balancing |
+
+---
+
+## References
+
+- [Kaggle Dataset](https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset)
+- [Scikit-learn RandomForest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
+- [MLflow](https://mlflow.org/docs/latest/index.html)
+- [CodeCarbon](https://codecarbon.io/)
+- [Great Expectations](https://greatexpectations.io/)
+
+---
+
+## Author
+
+**Ushafique**
+
+- GitHub: [@ozairshafique](https://github.com/ozairshafique)
+- DagsHub: [@ushafique](https://dagshub.com/ushafique)

@@ -136,23 +136,25 @@ def evaluate() -> dict:
     logger.info("Metrics saved to models/metrics.json")
     # Save emissions report
     os.makedirs('reports', exist_ok=True)
-    with open('reports/evaluate_emissions_report.txt', 'w') as f:
-        f.write(
-            f" Model Evaluation Performance Report\n"
-            f"-----------------------------------\n"
-            f" **Accuracy**:  {accuracy:.4f}\n"
-            f" **Precision**: {precision:.4f}\n"
-            f" **Recall**:    {recall:.4f}\n"
-            f" **F1-Score**:  {f1:.4f}\n"
-            f"Carbon Emissions: {emissions:.5f} kg CO2\n"
-            f"Energy Consumption: {emissions * 0.000055:.8f} kWh\n"
-            f"-----------------------------------\n"
-            f" ## Classification Report\n"
-            f"```\n"
-            )
+    with open('reports/model_report.md', 'w') as f:
+        f.write("# Model Evaluation Report\n\n")
+        f.write("## Overall Performance\n\n")
+        f.write(f"| Metric | Score |\n")
+        f.write(f"|--------|-------|\n")
+        f.write(f"| **Accuracy** | **{accuracy:.4f}** |\n")
+        f.write(f"| **Precision** | **{precision:.4f}** |\n")
+        f.write(f"| **Recall** | **{recall:.4f}** |\n")
+        f.write(f"| **F1-Score** | **{f1:.4f}** |\n\n")
+        f.write("## Carbon Footprint\n\n")
+        f.write(f"| Metric | Value |\n")
+        f.write(f"|--------|-------|\n")
+        f.write(f"| Carbon Emissions | {emissions:.5f} kg CO2 |\n")
+        f.write(f"| Energy Consumption | {emissions * 0.000055:.8f} kWh |\n\n")
+        f.write("## Classification Report\n\n")
+        f.write("```\n")
         f.write(report)
         f.write("```\n")
-        logger.info("Evaluation report saved to reports/evaluate_emissions_report.txt")
+        logger.info("Evaluation report saved to reports/report.md")
 
         mlflow.end_run()
     return metrics

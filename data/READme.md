@@ -4,9 +4,24 @@
 
 This dataset is designed to help in the recommendation of crops based on various environmental and soil conditions. It includes data on different parameters such as temperature, humidity, pH, and rainfall, which are crucial for determining the suitability of a crop for a particular region.
 
-### Source:
+## License
 
-- **Dataset URL**: [Crop Recommendation Dataset](https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset)
+Dataset sourced from Kaggle —
+[Crop Recommendation Dataset](https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset)
+Please refer to Kaggle's terms of use.
+
+---
+
+## Dataset Statistics
+
+| Property           | Value      |
+| ------------------ | ---------- |
+| Total Samples      | 2200       |
+| Training Samples   | 1760 (80%) |
+| Test Samples       | 440 (20%)  |
+| Number of Features | 7          |
+| Number of Classes  | 22         |
+| Missing Values     | None       |
 
 ---
 
@@ -25,6 +40,18 @@ This dataset is designed to help in the recommendation of crops based on various
 
 ---
 
+## Feature Ranges
+
+| Feature     | Min   | Max    | Mean   |
+| ----------- | ----- | ------ | ------ |
+| Nitrogen    | 0     | 140    | 50.55  |
+| Phosphorus  | 5     | 145    | 53.36  |
+| Potassium   | 5     | 205    | 48.14  |
+| Temperature | 8.83  | 43.67  | 25.61  |
+| Humidity    | 14.26 | 99.98  | 71.48  |
+| pH Value    | 3.50  | 9.94   | 6.47   |
+| Rainfall    | 20.21 | 298.56 | 103.46 |
+
 ## Dataset Usage
 
 ### Example Use Cases:
@@ -40,7 +67,10 @@ This dataset is designed to help in the recommendation of crops based on various
 
 ### Train-Test Split:
 
-- The dataset was split into 70% training data and 30% test data for evaluation and drift detection.
+| Split    | Samples | Percentage |
+| -------- | ------- | ---------- |
+| Training | 1760    | 80%        |
+| Testing  | 440     | 20%        |
 
 ---
 

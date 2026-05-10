@@ -5,6 +5,7 @@ It includes functions for loading data training data sets,
 and training a Random Forest model using the scikit-learn library.
 """
 import os
+import dotenv
 import logging
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
@@ -23,6 +24,27 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+dotenv.load_dotenv()
+
+MLFLOW_TRACKING_URI = os.getenv(
+    "MLFLOW_TRACKING_URI",
+    "http://localhost:5000"
+)
+DAGSHUB_USERNAME = os.getenv('DAGSHUB_USERNAME')
+DAGSHUB_REPO =  os.getenv('DAGSHUB_REPO')
+
+def setup_mlflow():
+    if "dagshub" in MLFLOW_TRACKING_URI:
+        dagshub.init(
+            repo_owner=os.getenv('DAGSHUB_USERNAME'),
+            repo_name=os.getenv('DAGSHUB_REPO'),
+            mlflow=True
+        )
+        logger.info("MLflow configured to use DagHub tracking server")
+    else:
+        mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+        logger.info(f"MLflow tracking URI set to {MLFLOW_TRACKING_URI}")
+
 
 def train():
 
@@ -32,70 +54,71 @@ def train():
     Returns:
         model: Trained Random Forest model.
     """
-
-    output_dir = "models"
-    output_file = os.path.join(output_dir, "model.pkl")
-
-# Ensure the models directory exists
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    dagshub.init(
-        repo_owner='ushafique',
-        repo_name='CropClassification',
-        mlflow=True)
-
+    setup_mlflow()
     # applying mlflow autologging
     mlflow.sklearn.autolog()
-    # Load the processed data
-    train_data = pd.read_csv('data/processed/train.csv')
+    with mlflow.start_run():
 
-    # Split the data into features (X) and target (y)
-    X_train = train_data.drop('Crop', axis=1)
-    y_train = train_data['Crop']
+        # Setup output directory for model artifacts
+        os.makedirs('models', exist_ok=True)
+        output_file = os.path.join('models', 'model.pkl')
 
-    # Create a label encoder object
-    label_encoder = LabelEncoder()
-    label_encoded = label_encoder.fit_transform(y_train)
+        try:
+            # Load the processed data
+            train_data = pd.read_csv('data/processed/train.csv')
+            logger.info(f"Training data loaded successfully with shape {train_data.shape}")
 
-    # Initialize emissions tracker
-    tracker = EmissionsTracker()
+        except FileNotFoundError as e:
+            logger.error(f"Training data file not found: {e}")
+            raise
 
-    tracker.start()
-    # Initialize the mode
-    model = RandomForestClassifier(
-        n_estimators=100,
-        random_state=42,
-        min_samples_split=5,
-        max_depth=5)
+        # Split the data into features (X) and target (y)
+        X_train = train_data.drop('Crop', axis=1)
+        y_train = train_data['Crop']
 
-    # Train the model
-    model.fit(X_train, label_encoded)
+        # Create a label encoder object
+        label_encoder = LabelEncoder()
+        label_encoded = label_encoder.fit_transform(y_train)
 
-    emissions = tracker.stop()
-    logger.info(
-        f"Estimated Carbon Emission for Model Training: {emissions:.5f} kg CO2"
-        )
+        params = {
+            'n_estimators': 100,
+            'random_state': 42,
+            'min_samples_split': 5,
+            'max_depth': 5
+        }
 
-    mlflow.log_metric("training_emissions", emissions)
-    mlflow.log_metric("training_energy_consumption", emissions * 0.000055)
+        # Log hyperparameters to MLflow
+        mlflow.log_params(params)
+
+        # Initialize emissions tracker
+        tracker = EmissionsTracker()
+        tracker.start()
+        # Initialize the mode
+        model = RandomForestClassifier(**params)
+        model.fit(X_train, label_encoded)
+        emissions = tracker.stop()
+        logger.info(
+            f"Estimated Carbon Emission for Model Training: {emissions:.5f} kg CO2"
+            )
+
+        mlflow.log_metric("training_emissions", emissions)
+        mlflow.log_metric("training_energy_consumption", emissions * 0.000055)
 
     # Save the model
-    joblib.dump(model, output_file)
-    joblib.dump(label_encoder, 'models/label_encoder.pkl')
-    logger.info(f"Model saved to {output_file}")
+        joblib.dump(model, output_file)
+        joblib.dump(label_encoder, 'models/label_encoder.pkl')
+        logger.info(f"Model saved to %s {output_file}")
 
-    # Save the emissions report to in text file
-    os.makedirs('reports', exist_ok=True)
-    with open('reports/train_model_emissions_report.txt', 'w') as f:
-        f.write(
-            f"Estimated Carbon Emission for "
-            f"Model Training: {emissions:.5f} kg CO2\n"
-            f"Estimated Energy Consumption for "
-            f"Model Training: "
-            f"{emissions * 0.000055:.5f} kWh\n"
-        )
+        # Save the emissions report to in text file
+        os.makedirs('reports', exist_ok=True)
+        with open('reports/train_model_emissions_report.txt', 'w') as f:
+            f.write(
+                f"Estimated Carbon Emission for "
+                f"Model Training: {emissions:.5f} kg CO2\n"
+                f"Estimated Energy Consumption for "
+                f"Model Training: "
+                f"{emissions * 0.000055:.5f} kWh\n"
+            )
 
     return model, label_encoder
 

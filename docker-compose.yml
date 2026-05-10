@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    restart: always
+    container_name: crop-classification
+    ports:
+      - "8000:8000"
+    depends_on:
+      - prometheus
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000 # Set MLflow tracking URI to point to the mlflow service
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    restart: always
+    container_name: mlflow
+    ports:
+      - "5000:5000" # Expose MLflow tracking server
+    command: mlflow server --host 0.0.0.0
+    volumes:
+      - mlflow_data:/mlflow # Persist MLflow data
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # Mount your configuration file
+    ports:
+      - "9090:9090" # Expose Prometheus dashboard
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000" # Expose Grafana dashboard
+    volumes:
+      - grafana_data:/var/lib/grafana # Persist Grafana data
+    env_file:
+      - .env
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    depends_on:
+      - prometheus
+      - mlflow
+
+volumes:
+  mlflow_data:
+  grafana_data:

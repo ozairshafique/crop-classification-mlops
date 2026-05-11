@@ -101,7 +101,7 @@ def train():
         emissions = tracker.stop()
         logger.info(
             "Estimated Carbon Emission for Model Training: %.5f kg CO2", emissions
-            )
+        )
 
         mlflow.log_metric("training_emissions", emissions)
         mlflow.log_metric("training_energy_consumption", emissions * 0.000055)

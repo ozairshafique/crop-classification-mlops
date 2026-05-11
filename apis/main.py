@@ -11,6 +11,28 @@ from sklearn.ensemble import RandomForestClassifier
 from prometheus_fastapi_instrumentator import Instrumentator
 from .schemas import CropFeatures, PerformanceMetrics, PredictionResponse
 from pydantic import BaseModel
+import asyncio
+from contextlib import asynccontextmanager
+from concurrent.futures import ThreadPoolExecutor
+
+
+model = None
+label_encoder = None
+summary_cache = None
+executor = ThreadPoolExecutor(max_workers=8)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """ lifespan context manager to handle startup and shutdown events """
+    global model, label_encoder
+    # Load model and label encoder at startup
+    model = joblib.load('models/model.pkl')
+    label_encoder = joblib.load('models/label_encoder.pkl')
+    if data is not None:
+        summary_cache = data.describe().to_dict()
+    logging.info("Model and label encoder loaded successfully.")
+    yield
 
 app = FastAPI(
     title="Crop Classification API",
@@ -81,7 +103,7 @@ def read_root():
          status_code=status.HTTP_200_OK,
          description="Get summary statistics of the dataset.")
 @REQUEST_TIME.time()
-def get_summary():
+async def get_summary():
     """
     Get summary statistics of the dataset.
 
@@ -89,7 +111,7 @@ def get_summary():
     REQUEST_COUNT.inc()
     if data is None:
         raise HTTPException(status_code=404, detail="Dataset not available.")
-    return data.describe().to_dict()
+    return summary_cache
 
 
 # Define performance endpoint
@@ -114,12 +136,17 @@ async def get_performance():
           response_model=PredictionResponse,
           status_code=status.HTTP_200_OK
           )
-def predict(crop_input: CropFeatures):
+async def predict(crop_input: CropFeatures):
     """Predict the most suitable crop based on input features """
     REQUEST_COUNT.inc()
     try:
         input_data = pd.DataFrame([crop_input.model_dump()])
-        prediction = model.predict(input_data)
+        # run in a thread to avoid blocking the event loop
+        loop = asyncio.get_event_loop()
+        prediction = await asyncio.wait_for(
+            loop.run_in_executor(executor, model.predict, input_data),
+            timeout=10
+        )
         predicted_crop = label_encoder.inverse_transform(prediction)[0]
         return PredictionResponse(
             predicted=predicted_crop,
@@ -149,7 +176,7 @@ async def model_info():
 
 
 @app.get("/health", status_code=status.HTTP_200_OK, tags=["Health"])
-def health_check():
+async def health_check():
     """Health check endpoint to verify that the API is running"""
     REQUEST_COUNT.inc()
     return {

@@ -40,10 +40,12 @@ def setup_mlflow():
             repo_name=os.getenv('DAGSHUB_REPO'),
             mlflow=True
         )
-        logger.info(f"MLflow configured to use DagHub tracking server for repo {os.getenv('DAGSHUB_REPO')}")
+        logger.info(
+            "MLflow configured to use DagHub %s", os.getenv('DAGSHUB_REPO')
+        )
     else:
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-        logger.info(f"MLflow tracking URI set to: {MLFLOW_TRACKING_URI}")
+        logger.info("MLflow tracking URI set to: %s", MLFLOW_TRACKING_URI)
 
 
 def evaluate() -> dict:
@@ -90,14 +92,14 @@ def evaluate() -> dict:
         y_pred_encoded = model.predict(X_test)
         emissions = tracker.stop()
         logger.info(
-            f"Inference emissions: {emissions:.5f} kg CO2"
-            )
+            "Inference emissions: %.5f kg CO2", emissions
+        )
 
         # Log emissions to MLflow
         mlflow.log_metric("eval_emissions_kg_co2", emissions)
         mlflow.log_metric("eval_energy_kwh", emissions * 0.000055)
 
-       # Decode predictions
+        # Decode predictions
         y_pred = label_encoder.inverse_transform(y_pred_encoded)
 
         # Calculate metrics — all weighted
@@ -117,10 +119,10 @@ def evaluate() -> dict:
         mlflow.log_metric("f1_score", f1)
 
         # Log to console
-        logger.info(f"Accuracy:  {accuracy:.4f}")
-        logger.info(f"Precision: {precision:.4f}")
-        logger.info(f"Recall:    {recall:.4f}")
-        logger.info(f"F1-score:  {f1:.4f}")
+        logger.info("Accuracy:  %.4f", accuracy)
+        logger.info("Precision: %.4f", precision)
+        logger.info("Recall:    %.4f", recall)
+        logger.info("F1-score: %.4f", f1)
 
         # Save metrics dict
         metrics = {
@@ -139,15 +141,15 @@ def evaluate() -> dict:
     with open('reports/model_report.md', 'w') as f:
         f.write("# Model Evaluation Report\n\n")
         f.write("## Overall Performance\n\n")
-        f.write(f"| Metric | Score |\n")
-        f.write(f"|--------|-------|\n")
+        f.write("| Metric | Score |\n")
+        f.write("|--------|-------|\n")
         f.write(f"| **Accuracy** | **{accuracy:.4f}** |\n")
         f.write(f"| **Precision** | **{precision:.4f}** |\n")
         f.write(f"| **Recall** | **{recall:.4f}** |\n")
         f.write(f"| **F1-Score** | **{f1:.4f}** |\n\n")
         f.write("## Carbon Footprint\n\n")
-        f.write(f"| Metric | Value |\n")
-        f.write(f"|--------|-------|\n")
+        f.write("| Metric | Value |\n")
+        f.write("|--------|-------|\n")
         f.write(f"| Carbon Emissions | {emissions:.5f} kg CO2 |\n")
         f.write(f"| Energy Consumption | {emissions * 0.000055:.8f} kWh |\n\n")
         f.write("## Classification Report\n\n")

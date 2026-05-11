@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 try:
     # Load the crop recommendation dataset
-    df = pd.read_csv('data/raw/Crop_Recommendation.csv')  # Adjust the path as necessary
+    df = pd.read_csv('data/raw/Crop_Recommendation.csv')
     logger.info("Crop recommendation dataset loaded successfully")
 except FileNotFoundError as e:
     logger.error("Dataset not found: %s", e)

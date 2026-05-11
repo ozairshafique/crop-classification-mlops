@@ -47,12 +47,20 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Pull data from DVC
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.DAGSHUB_USERNAME }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.DAGSHUB_TOKEN }}
+      - name: Setup DVC remote
         run: |
-          dvc pull
+          dvc remote add dagshub https://dagshub.com/ushafique/CropClassification.dvc --force
+          dvc remote modify dagshub --local auth basic
+          dvc remote modify dagshub --local user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify dagshub --local password ${{ secrets.DAGSHUB_TOKEN }}
+
+      - name: Pull raw data from DVC remote
+        run: |
+          dvc pull data/raw/Crop_Recommendation.csv -r dagshub --force
+
+      - name: Run DVC pipeline
+        run: |
+          dvc repro
 
       - name: Created required directories
         run: |

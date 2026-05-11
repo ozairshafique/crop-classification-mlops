@@ -4,18 +4,17 @@ This module contains functions for training machine learning models.
 It includes functions for loading data training data sets,
 and training a Random Forest model using the scikit-learn library.
 """
-import os
 import logging
+import os
+
+import dagshub
 import dotenv
+import joblib
+import mlflow.sklearn
 import pandas as pd
+from codecarbon import EmissionsTracker
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-import mlflow.sklearn
-import dagshub
-import joblib
-from codecarbon import EmissionsTracker
-
-# function to train the model
 
 logging.basicConfig(
     level=logging.INFO,
@@ -41,10 +40,10 @@ def setup_mlflow():
             repo_name=os.getenv('DAGSHUB_REPO'),
             mlflow=True
         )
-        logger.info("MLflow configured to use DagHub tracking server")
+        logger.info("MLflow configured to use DagsHub tracking server")
     else:
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-        logger.info(f"MLflow tracking URI set to %s{MLFLOW_TRACKING_URI}")
+        logger.info("MLflow tracking URI set to %s", MLFLOW_TRACKING_URI)
 
 
 def train():
@@ -55,30 +54,25 @@ def train():
         model: Trained Random Forest model.
     """
     setup_mlflow()
-    # applying mlflow autologging
     mlflow.sklearn.autolog()
+
     with mlflow.start_run():
 
-        # Setup output directory for model artifacts
         os.makedirs('models', exist_ok=True)
         output_file = os.path.join('models', 'model.pkl')
 
         try:
-            # Load the processed data
             train_data = pd.read_csv('data/processed/train.csv')
             logger.info(
-                f"Training data loaded with shape %s {train_data.shape}"
+                "Training data loaded with shape %s", train_data.shape
             )
-
         except FileNotFoundError as e:
             logger.error("Training data file not found: %s", e)
             raise
 
-        # Split the data into features (X) and target (y)
         X_train = train_data.drop('Crop', axis=1)
         y_train = train_data['Crop']
 
-        # Create a label encoder object
         label_encoder = LabelEncoder()
         label_encoded = label_encoder.fit_transform(y_train)
 
@@ -89,31 +83,31 @@ def train():
             'max_depth': 5
         }
 
-        # Log hyperparameters to MLflow
         mlflow.log_params(params)
 
-        # Initialize emissions tracker
         tracker = EmissionsTracker()
         tracker.start()
-        # Initialize the mode
         model = RandomForestClassifier(**params)
         model.fit(X_train, label_encoded)
         emissions = tracker.stop()
+
         logger.info(
-            "Estimated Carbon Emission for Model Training: %.5f kg CO2", emissions
+            "Estimated Carbon Emission for Model Training: %.5f kg CO2",
+            emissions
         )
 
         mlflow.log_metric("training_emissions", emissions)
-        mlflow.log_metric("training_energy_consumption", emissions * 0.000055)
+        mlflow.log_metric(
+            "training_energy_consumption", emissions * 0.000055
+        )
 
-    # Save the model
         joblib.dump(model, output_file)
         joblib.dump(label_encoder, 'models/label_encoder.pkl')
-        logger.info(f"Model saved to %s {output_file}")
+        logger.info("Model saved to %s", output_file)
 
-        # Save the emissions report to in text file
         os.makedirs('reports', exist_ok=True)
-        with open('reports/train_model_emissions_report.txt', 'w', encoding='utf-8') as f:
+        report_path = 'reports/train_model_emissions_report.txt'
+        with open(report_path, 'w', encoding='utf-8') as f:
             f.write(
                 f"Estimated Carbon Emission for "
                 f"Model Training: {emissions:.5f} kg CO2\n"

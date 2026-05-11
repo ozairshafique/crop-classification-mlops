@@ -43,8 +43,7 @@ def process_data():
     # Read the raw data
     df = pd.read_csv(raw_data_path)
     logger.info(
-        f"Loaded data: {df.shape[0]} rows, "
-        f"{df.shape[1]} columns"
+        "Loaded data: %d rows, %d columns", df.shape[0], df.shape[1]
     )
 
     # Split the data into features (X) and target (y)

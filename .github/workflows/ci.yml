@@ -58,13 +58,13 @@ jobs:
         run: |
           dvc pull data/raw/Crop_Recommendation.csv -r dagshub --force
 
-      - name: Run DVC pipeline
-        run: |
-          dvc repro
-
       - name: Created required directories
         run: |
           mkdir -p models reports
+
+      - name: Run DVC pipeline
+        run: |
+          dvc repro
 
       - name: Run Pytest
         run: |

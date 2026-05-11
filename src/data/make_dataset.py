@@ -15,13 +15,12 @@ from sklearn.model_selection import train_test_split
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
-    )
+)
 
 logger = logging.getLogger(__name__)
 
 
 def process_data():
-
     """
     Load and preprocess the dataset.
 
@@ -39,7 +38,7 @@ def process_data():
     if not os.path.exists(raw_data_path):
         raise FileNotFoundError(
             f"The file {raw_data_path} does not exist. Please check the path."
-            )
+        )
 
     # Read the raw data
     df = pd.read_csv(raw_data_path)
@@ -57,7 +56,7 @@ def process_data():
         X, y,
         test_size=0.2,
         random_state=42
-        )
+    )
 
     # Combine features and target for train and test sets
     train_data = pd.concat([X_train.reset_index(drop=True),
@@ -73,11 +72,11 @@ def process_data():
     train_data.to_csv(
         os.path.join(processed_dir, 'train.csv'),
         index=False
-            )
+    )
     test_data.to_csv(
         os.path.join(processed_dir, 'test.csv'),
         index=False
-            )
+    )
     logger.info(
         f"Train Set: {len(train_data)} | "
         f"Test Set: {len(test_data)}"
@@ -86,7 +85,7 @@ def process_data():
     logger.info(
         "Data processing complete."
         "Train and test datasets saved to 'data/processed/' directory."
-        )
+    )
 
     return train_data, test_data
 

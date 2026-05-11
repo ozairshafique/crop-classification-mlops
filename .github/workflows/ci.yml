@@ -45,7 +45,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install setuptools
+          pip install setuptools wheel
           pip install -r requirements.txt
 
       - name: Setup DVC remote

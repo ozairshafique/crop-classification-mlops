@@ -5,8 +5,8 @@ It includes functions for loading data training data sets,
 and training a Random Forest model using the scikit-learn library.
 """
 import os
-import dotenv
 import logging
+import dotenv
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
@@ -20,7 +20,7 @@ from codecarbon import EmissionsTracker
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
-    )
+)
 
 logger = logging.getLogger(__name__)
 
@@ -44,11 +44,10 @@ def setup_mlflow():
         logger.info("MLflow configured to use DagHub tracking server")
     else:
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-        logger.info(f"MLflow tracking URI set to {MLFLOW_TRACKING_URI}")
+        logger.info(f"MLflow tracking URI set to %s{MLFLOW_TRACKING_URI}")
 
 
 def train():
-
     """
     Train a Random Forest model on the given dataset.
 
@@ -68,11 +67,11 @@ def train():
             # Load the processed data
             train_data = pd.read_csv('data/processed/train.csv')
             logger.info(
-                f"Training data loaded with shape {train_data.shape}"
-                )
+                f"Training data loaded with shape %s {train_data.shape}"
+            )
 
         except FileNotFoundError as e:
-            logger.error(f"Training data file not found: {e}")
+            logger.error("Training data file not found: %s", e)
             raise
 
         # Split the data into features (X) and target (y)
@@ -101,7 +100,7 @@ def train():
         model.fit(X_train, label_encoded)
         emissions = tracker.stop()
         logger.info(
-            f"Estimated Carbon Emission for Model Training: {emissions:.5f} kg CO2"
+            "Estimated Carbon Emission for Model Training: %.5f kg CO2", emissions
             )
 
         mlflow.log_metric("training_emissions", emissions)
@@ -114,7 +113,7 @@ def train():
 
         # Save the emissions report to in text file
         os.makedirs('reports', exist_ok=True)
-        with open('reports/train_model_emissions_report.txt', 'w') as f:
+        with open('reports/train_model_emissions_report.txt', 'w', encoding='utf-8') as f:
             f.write(
                 f"Estimated Carbon Emission for "
                 f"Model Training: {emissions:.5f} kg CO2\n"

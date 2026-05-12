@@ -36,7 +36,7 @@ services:
     container_name: grafana
     restart: always
     ports:
-      - "3001:3000" # Expose Grafana dashboard
+      - "3002:3000" # Expose Grafana dashboard
     volumes:
       - grafana_data:/var/lib/grafana # Persist Grafana data
     env_file:

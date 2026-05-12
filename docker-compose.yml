@@ -2,15 +2,15 @@ version: "3.8"
 
 services:
   app:
-    build: .
+    image: yourwhale/crops-classifications:latest
     restart: always
     container_name: crop-classification
     ports:
-      - "8000:8000"
+      - "8001:8000"
     depends_on:
       - prometheus
     environment:
-      - MLFLOW_TRACKING_URI=http://mlflow:5000 # Set MLflow tracking URI to point to the mlflow service
+      - MLFLOW_TRACKING_URI=https://dagshub.com/ushafique/CropClassification.mlflow # Set MLflow tracking URI to point to the mlflow service
 
   mlflow:
     image: ghcr.io/mlflow/mlflow:latest

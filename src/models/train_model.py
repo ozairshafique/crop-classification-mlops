@@ -34,7 +34,7 @@ DAGSHUB_REPO = os.getenv('DAGSHUB_REPO')
 
 
 def setup_mlflow():
-    if "dagshub" in MLFLOW_TRACKING_URI:
+    if DAGSHUB_USERNAME and DAGSHUB_REPO:
         dagshub.init(
             repo_owner=os.getenv('DAGSHUB_USERNAME'),
             repo_name=os.getenv('DAGSHUB_REPO'),

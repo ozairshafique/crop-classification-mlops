@@ -34,6 +34,7 @@ MLFLOW_TRACKING_URI = os.getenv(
 DAGSHUB_USERNAME = os.getenv('DAGSHUB_USERNAME')
 DAGSHUB_REPO = os.getenv('DAGSHUB_REPO')
 
+
 def setup_mlflow():
     if DAGSHUB_USERNAME and DAGSHUB_REPO:
         mlflow.set_tracking_uri(

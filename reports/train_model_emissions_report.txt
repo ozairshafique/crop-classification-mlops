@@ -1,2 +1,2 @@
-Estimated Carbon Emission for Model Training: 0.00002 kg CO2
+Estimated Carbon Emission for Model Training: 0.00001 kg CO2
 Estimated Energy Consumption for Model Training: 0.00000 kWh

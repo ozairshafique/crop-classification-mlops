@@ -6,7 +6,6 @@ __pycache__
 envs
 venv
 mlruns/
-*.pkl
 .pytest_cache
 .gitignore
 notebooks/

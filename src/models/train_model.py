@@ -7,7 +7,6 @@ and training a Random Forest model using the scikit-learn library.
 import logging
 import os
 
-import dagshub
 import dotenv
 import joblib
 import mlflow.sklearn

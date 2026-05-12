@@ -12,7 +12,6 @@ import dotenv
 import joblib
 import mlflow
 import mlflow.sklearn
-import dagshub
 import pandas as pd
 from sklearn.metrics import (
     accuracy_score, precision_score,
@@ -32,14 +31,17 @@ MLFLOW_TRACKING_URI = os.getenv(
     'http://localhost:5000'
 )
 
+DAGSHUB_USERNAME = os.getenv('DAGSHUB_USERNAME')
+DAGSHUB_REPO = os.getenv('DAGSHUB_REPO')
 
 def setup_mlflow():
-    if "dagshub" in MLFLOW_TRACKING_URI:
-        dagshub.init(
-            repo_owner=os.getenv('DAGSHUB_USERNAME'),
-            repo_name=os.getenv('DAGSHUB_REPO'),
-            mlflow=True
+    if DAGSHUB_USERNAME and DAGSHUB_REPO:
+        mlflow.set_tracking_uri(
+            f"https://dagshub.com/{DAGSHUB_USERNAME}/{DAGSHUB_REPO}.mlflow"
         )
+        os.environ['MLFLOW_TRACKING_USERNAME'] = DAGSHUB_USERNAME
+        os.environ['MLFLOW_TRACKING_PASSWORD'] = os.getenv('DAGSHUB_TOKEN', '')
+        logger.info("MLflow configured to use DagsHub tracking server")
         logger.info(
             "MLflow configured to use DagHub %s", os.getenv('DAGSHUB_REPO')
         )

@@ -35,11 +35,11 @@ DAGSHUB_REPO = os.getenv('DAGSHUB_REPO')
 
 def setup_mlflow():
     if DAGSHUB_USERNAME and DAGSHUB_REPO:
-        dagshub.init(
-            repo_owner=os.getenv('DAGSHUB_USERNAME'),
-            repo_name=os.getenv('DAGSHUB_REPO'),
-            mlflow=True
-        )
+        mlflow.set_tracking_uri(
+            f"https://dagshub.com/{DAGSHUB_USERNAME}/{DAGSHUB_REPO}.mlflow"
+            )
+        os.environ['MLFLOW_TRACKING_USERNAME'] = DAGSHUB_USERNAME
+        os.environ['MLFLOW_TRACKING_PASSWORD'] = os.getenv('DAGSHUB_TOKEN', '')
         logger.info("MLflow configured to use DagsHub tracking server")
     else:
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)

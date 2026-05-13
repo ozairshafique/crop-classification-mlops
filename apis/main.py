@@ -10,16 +10,26 @@ from prometheus_client import Counter, Summary
 from sklearn.ensemble import RandomForestClassifier
 from prometheus_fastapi_instrumentator import Instrumentator
 from .schemas import CropFeatures, PerformanceMetrics, PredictionResponse
-from pydantic import BaseModel
 import asyncio
 from contextlib import asynccontextmanager
 from concurrent.futures import ThreadPoolExecutor
 
-
 model = None
 label_encoder = None
-summary_cache = None
 executor = ThreadPoolExecutor(max_workers=8)
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+try:
+    data = pd.read_csv('data/raw/Crop_Recommendation.csv')
+    logger.info(f"Dataset loaded with shape {data.shape}.")
+except FileNotFoundError:
+    logger.warning("Dataset file not found - summary endpoint unavailable.")
+    data = None
 
 
 @asynccontextmanager
@@ -38,6 +48,7 @@ app = FastAPI(
     title="Crop Classification API",
     version="0.1.2",
     description="API for predicting suitable crops based on soil and weather features.",
+    lifespan=lifespan
 )
 
 app.add_middleware(
@@ -48,11 +59,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 # Initialize Prometheus Instrumentator
 instrumentator = Instrumentator()
@@ -66,21 +72,6 @@ REQUEST_COUNT = Counter(
     'request_count',
     'Total number of requests received'
     )
-
-try:
-    data = pd.read_csv('data/raw/Crop_Recommendation.csv')
-    logger.info(f"Dataset loaded with shape {data.shape}.")
-except FileNotFoundError:
-    logger.warning("Dataset file not found - summary endpoint unavailable.")
-    data = None
-
-try:
-    model = joblib.load('models/model.pkl')
-    label_encoder = joblib.load('models/label_encoder.pkl')
-    logger.info("Model and label encoder loaded successfully.")
-except FileNotFoundError as e:
-    logger.error(f"Model files not found. {e}")
-    raise
 
 
 # Root endpoint
@@ -109,14 +100,14 @@ async def get_summary():
 
     """
     REQUEST_COUNT.inc()
-    if data is None:
+    if summary_cache is None:
         raise HTTPException(status_code=404, detail="Dataset not available.")
     return summary_cache
 
 
 # Define performance endpoint
 @app.get("/performance",
-         status_code=status.HTTP_200_OK,response_model=PerformanceMetrics)
+         status_code=status.HTTP_200_OK, response_model=PerformanceMetrics)
 async def get_performance():
     """ Get model performance metrics from the metrics.json file."""
     REQUEST_COUNT.inc()

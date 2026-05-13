@@ -54,6 +54,7 @@ def train():
     """
     setup_mlflow()
     mlflow.sklearn.autolog()
+    mlflow.set_experiment("Crop Classifications")
 
     with mlflow.start_run():
 

@@ -137,6 +137,6 @@ jobs:
             docker compose down
             docker pull ${{ env.DOCKER_IMAGE}}:latest
             docker compose up -d
-            sleep 15
+            sleep 30
             curl http://localhost:8001/health
             echo "Deployed to EC2 successfully"

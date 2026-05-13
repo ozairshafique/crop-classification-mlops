@@ -16,6 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 model = None
 label_encoder = None
+summary_cache = None
 executor = ThreadPoolExecutor(max_workers=8)
 
 # Set up logging

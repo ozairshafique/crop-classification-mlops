@@ -94,7 +94,6 @@ def read_root():
 @app.get("/summary",
          status_code=status.HTTP_200_OK,
          description="Get summary statistics of the dataset.")
-@REQUEST_TIME.time()
 async def get_summary():
     """
     Get summary statistics of the dataset.

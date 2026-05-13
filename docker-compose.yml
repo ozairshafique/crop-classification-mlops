@@ -7,6 +7,9 @@ services:
     container_name: crop-classification
     ports:
       - "8001:8000"
+    volumes:
+      - ./models:/app/models # Mount the models directory
+      - ./data:/app/data # Mount the data directory
     depends_on:
       - prometheus
     environment:

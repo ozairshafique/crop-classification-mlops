@@ -25,7 +25,7 @@ executor = ThreadPoolExecutor(max_workers=8)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """ lifespan context manager to handle startup and shutdown events """
-    global model, label_encoder
+    global model, label_encoder, summary_cache
     # Load model and label encoder at startup
     model = joblib.load('models/model.pkl')
     label_encoder = joblib.load('models/label_encoder.pkl')

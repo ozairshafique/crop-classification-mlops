@@ -135,8 +135,9 @@ jobs:
             cd crop-classification-mlops
             git pull origin main
             docker compose down
-            docker pull ${{ env.DOCKER_IMAGE}}:latest
+            docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
+            docker pull ${{ env.DOCKER_IMAGE }}:latest
             docker compose up -d
             sleep 30
-            curl http://localhost:8001/health
+            curl --fail http://localhost:8001/health
             echo "Deployed to EC2 successfully"

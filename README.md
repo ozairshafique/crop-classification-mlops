@@ -4,8 +4,13 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111.0-green.svg)](https://fastapi.tiangolo.com)
 [![MLflow](https://img.shields.io/badge/MLflow-2.19.0-orange.svg)](https://mlflow.org)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docker.com)
-[![DagsHub](https://img.shields.io/badge/DagsHub-Experiments-orange.svg)](https://dagshub.com/ushafique/CropClassification)
-[![CI/CD](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml)
+[![DagsHub](https://img.shields.io/badge/DagsHub-Experiments-pink.svg)](https://dagshub.com/ushafique/CropClassification)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.35.0-red.svg)](https://streamlit.io)
+[![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-orange.svg)](https://prometheus.io)
+[![Grafana](https://img.shields.io/badge/Grafana-Dashboard-orange.svg)](https://grafana.com)
+[![Locust](https://img.shields.io/badge/Locust-Load%20Testing-green.svg)](https://locust.io)
+[![AWS](https://img.shields.io/badge/AWS-EC2%20Deployed-orange.svg)](https://aws.amazon.com)
+[![CI/CD](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci-cd.yml)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > A production-grade **end-to-end MLOps pipeline** for crop classification

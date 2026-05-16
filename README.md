@@ -5,7 +5,7 @@
 [![MLflow](https://img.shields.io/badge/MLflow-2.19.0-orange.svg)](https://mlflow.org)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docker.com)
 [![DagsHub](https://img.shields.io/badge/DagsHub-Experiments-orange.svg)](https://dagshub.com/ushafique/CropClassification)
-[![CI/CD](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci-cd.yml)
+[![CI/CD](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > A production-grade **end-to-end MLOps pipeline** for crop classification

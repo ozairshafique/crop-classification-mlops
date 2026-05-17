@@ -46,7 +46,7 @@ def setup_mlflow():
         logger.info(
             "MLflow configured to use DagHub %s", os.getenv('DAGSHUB_REPO')
         )
-    else:
+    else:  # pragma: no cover
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
         logger.info("MLflow tracking URI set to: %s", MLFLOW_TRACKING_URI)
 
@@ -165,5 +165,5 @@ def evaluate() -> dict:
     return metrics
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     evaluate()

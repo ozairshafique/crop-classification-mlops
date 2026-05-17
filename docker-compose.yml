@@ -15,6 +15,21 @@ services:
     environment:
       - MLFLOW_TRACKING_URI=https://dagshub.com/ushafique/CropClassification.mlflow # Set MLflow tracking URI to point to the mlflow service
 
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    restart: always
+    container_name: streamlit_crops
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      - API_URL=${API_URL} # pass  API URL from .env file
+    depends_on:
+      - app
+
   mlflow:
     image: ghcr.io/mlflow/mlflow:latest
     restart: always

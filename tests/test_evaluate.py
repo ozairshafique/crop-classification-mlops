@@ -134,7 +134,27 @@ def test_evaluate_data_not_found():
 def test_evaluate_metrics_calculation():
     """Test if the evaluate function calculates metrics correctly with mock data"""
 
-    metrics = evaluate()
+    mock_data = pd.DataFrame({
+        'Nitrogen': [90, 85, 80, 29],
+        'Phosphorus': [42, 40, 38, 41],
+        'Potassium': [49, 45, 40, 42],
+        'Temperature': [20.82, 21.0, 19.5, 20.0],
+        'Humidity': [82, 80, 78, 85],
+        'pH_Value': [6.5, 6.8, 6.2, 6.0],
+        'Rainfall': [202.82, 210.0, 190.0, 180.0],
+        'Crop': ['Rice', 'Wheat', 'Barley', 'Maize']
+    })
+
+    mock_model = MagicMock()
+    mock_model.predict.return_value = [0, 1, 2, 3]  # Mock predictions
+    mock_encoders = MagicMock()
+    mock_encoders.inverse_transform.return_value = ['Rice', 'Wheat', 'Barley', 'Maize']
+    mock_encoders.classes_ = ['Rice',  'Barley', 'Maize', 'Wheat']
+
+    with patch('joblib.load', side_effect=[mock_model, mock_encoders]), \
+         patch('pandas.read_csv', return_value=mock_data):
+        metrics = evaluate()
+
     assert metrics is not None
     assert 'accuracy' in metrics
     assert 'precision' in metrics

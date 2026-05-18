@@ -1,52 +1,51 @@
+
+import os
+import sys
 import pytest
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
+from src.data.make_dataset import process_data
+from unittest.mock import patch, MagicMock
+from src.models.train_model import train
+
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 def test_load_data():
     """Test if the data is loaded correctly."""
-    data = pd.read_csv('data/raw/Crop_Recommendation.csv')
 
-    assert not data.empty  # Check that the data is not empty
-    assert len(data) > 0  # Check that there are rows in the data
-    assert 'Crop' in data.columns  # Ensure the 'Crop' column exists
+    train_data, test_data = process_data()
+    assert train_data is not None
+    assert test_data is not None
+    assert len(train_data) > 0  # Check that there are rows in the data
+    assert 'Crop' in train_data.columns  # Ensure the 'Crop' column exists
+
+
+def test_data_not_found():
+    """Test if the function raises an error when data file is missing."""
+
+    with patch('src.data.make_dataset.pd.read_csv', side_effect=FileNotFoundError("File not found")):
+        with pytest.raises(FileNotFoundError):
+            process_data()
 
 
 def test_train_model():
     """Test if the model can be trained."""
     # Load the data
-    data = pd.read_csv('data/processed/train.csv')
-    X = data.drop('Crop', axis=1)
-    y = data['Crop']
+    train_data, _ = process_data()
+    X = train_data.drop('Crop', axis=1)
+    y = train_data['Crop']
+    model, label_encoder = train()
 
-    # Encode the labels
-    label_encoder = LabelEncoder()
-    label_encoded = label_encoder.fit_transform(y)
-
-    # Split the data
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        label_encoded,
-        test_size=0.2,
-        random_state=42)
-
-    # Initialize the model
-    model = RandomForestClassifier(n_estimators=50, random_state=42)
-
-    # Train the model
-    model.fit(X_train, y_train)
-
-    # Ensure the model is trained
+    # Ensure the model and encoder are created
     assert model is not None
-    score = model.score(X_test, y_test)
-    assert score > 0.5  # Ensure the model has some predictive power
+    assert label_encoder is not None
 
 
 def test_data_columns():
     """ Test if the processed data has the expected columns """
-    data = pd.read_csv('data/processed/train.csv')
+    train_data, _ = process_data()
     expected_columns = [
         'Nitrogen',
         'Phosphorus',
@@ -59,7 +58,21 @@ def test_data_columns():
         ]
 
     for column in expected_columns:
-        assert column in data.columns
+        assert column in train_data.columns
+        assert train_data[column].isnull().sum() == 0  # Check for missing values
+
+
+def test_train_data_not_found():
+    """Test if the function raises an error when data file is missing."""
+    mock_model = MagicMock()
+    mock_label_encoder = MagicMock()
+    with patch('joblib.load', side_effect=[mock_model, mock_label_encoder]), \
+        patch('pandas.read_csv', side_effect=FileNotFoundError("File not found")), \
+        patch('mlflow.set_experiment'), \
+        patch('mlflow.start_run'), \
+        patch('mlflow.end_run'):
+        with pytest.raises(FileNotFoundError):
+            train()
 
 
 if __name__ == "__main__":

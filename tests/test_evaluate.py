@@ -1,5 +1,7 @@
 import pytest
+import os
 import pandas as pd
+import mlflow
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -7,6 +9,10 @@ from sklearn.metrics import (
     f1_score
 )
 import joblib
+from src.models.evaluate import evaluate, setup_mlflow, MLFLOW_TRACKING_URI
+from unittest.mock import patch, MagicMock
+
+
 
 
 # This is a test function
@@ -61,6 +67,66 @@ def test_model_load():
     assert model is not None
     assert label_encoder is not None
     assert len(label_encoder.classes_) > 10
+
+
+@pytest.fixture(autouse="True")
+def cleanup_mlflow():
+    """ Fixture to clean up MLflow runs after each test to prevent interference between tests. """
+    mlflow.end_run()  # Ensure any active run is ended before the test
+    yield
+    mlflow.end_run()  # Ensure any active run is ended after the test
+
+def tests_mlflow_with_dagshub():
+    with patch.dict(os.environ,
+                    {'DAGSHUB_NAME': 'testuser',
+                     'DAGSHUB_REPO': 'testrepo',
+                     'DAGSHUB_TOKEN': 'testtoken'}, clear=True):
+        with patch('mlflow.set_tracking_uri') as mock_uri:
+            with patch('src.models.evaluate.DAGSHUB_USERNAME', None):
+                with patch('src.models.evaluate.DAGSHUB_REPO', None):
+                        setup_mlflow()
+                        mock_uri.assert_called_once()
+
+
+def test_evaluate_model_not_found():
+    with patch('joblib.load', side_effect=FileNotFoundError("Model file not found")),\
+        patch('mlflow.set_experiment'), \
+        patch('mlflow.start_run'), \
+        patch('mlflow.end_run'):
+
+        with pytest.raises(FileNotFoundError):
+            evaluate()
+
+
+def test_evaluate_data_not_found():
+
+    mock_model = MagicMock()
+    mock_label_encoder = MagicMock()
+
+    with patch('joblib.load', side_effect=[mock_model, mock_label_encoder]), \
+        patch('pandas.read_csv', side_effect=FileNotFoundError("data file not found")), \
+        patch('mlflow.set_experiment'), \
+        patch('mlflow.start_run'), \
+        patch('mlflow.end_run'):
+
+        with pytest.raises(FileNotFoundError):
+            evaluate()
+
+
+def test_evaluate_metrics_calculation():
+    """Test if the evaluate function calculates metrics correctly with mock data"""
+
+    metrics = evaluate()
+    assert metrics is not None
+    assert 'accuracy' in metrics
+    assert 'precision' in metrics
+    assert 'recall' in metrics
+    assert 'f1' in metrics
+
+    for key, value in metrics.items():
+        assert isinstance(value, float)
+
+    assert metrics['accuracy'] >= 0.9
 
 
 if __name__ == "__main__":

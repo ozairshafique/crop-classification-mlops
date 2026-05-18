@@ -119,5 +119,5 @@ def train():
     return model, label_encoder
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":   # pragma: no cover
     train()

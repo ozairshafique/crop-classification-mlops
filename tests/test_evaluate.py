@@ -94,16 +94,19 @@ def cleanup_mlflow():
     yield
     mlflow.end_run()  # Ensure any active run is ended after the test
 
-def tests_mlflow_with_dagshub():
-    with patch.dict(os.environ,
-                    {'DAGSHUB_NAME': 'testuser',
-                     'DAGSHUB_REPO': 'testrepo',
-                     'DAGSHUB_TOKEN': 'testtoken'}, clear=True):
-        with patch('mlflow.set_tracking_uri') as mock_uri:
-            with patch('src.models.evaluate.DAGSHUB_USERNAME', None):
-                with patch('src.models.evaluate.DAGSHUB_REPO', None):
-                        setup_mlflow()
-                        mock_uri.assert_called_once()
+def test_mlflow_with_dagshub():
+    with patch('src.models.evaluate.DAGSHUB_USERNAME', 'testuser'), \
+         patch('src.models.evaluate.DAGSHUB_REPO', 'testrepo'), \
+         patch('src.models.evaluate.mlflow.set_tracking_uri') as mock_set_tracking_uri, \
+         patch('src.models.evaluate.mlflow.set_experiment'), \
+         patch('src.models.evaluate.mlflow.end_run'):
+        import src.models.evaluate as evaluate_module
+        evaluate_module.DAGSHUB_USERNAME = 'testuser'
+        evaluate_module.DAGSHUB_REPO = 'testrepo'
+
+        setup_mlflow()
+        mock_set_tracking_uri.assert_called_once_with('https://dagshub.com/testuser/testrepo.mlflow')
+        assert os.environ['MLFLOW_TRACKING_USERNAME'] == 'testuser'
 
 
 def test_evaluate_model_not_found():

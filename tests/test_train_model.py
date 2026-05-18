@@ -1,76 +1,75 @@
-
 import os
 import sys
 import pytest
 import pandas as pd
-from src.data.make_dataset import process_data
+import mlflow
 from unittest.mock import patch, MagicMock
+from src.data.make_dataset import process_data
 from src.models.train_model import train
-
 
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-def test_load_data():
-    """Test if the data is loaded correctly."""
+@pytest.fixture(autouse=True)
+def mock_mlflow_all():
+    mock_run = MagicMock()
+    mock_run.__enter__ = MagicMock(return_value=mock_run)
+    mock_run.__exit__ = MagicMock(return_value=False)
 
+    mock_tracker = MagicMock()
+    mock_tracker.stop.return_value = 0.0001
+
+    with patch('src.models.train_model.mlflow.set_tracking_uri'), \
+         patch('src.models.train_model.mlflow.set_experiment'), \
+         patch('src.models.train_model.mlflow.sklearn.autolog'), \
+         patch('src.models.train_model.mlflow.start_run', return_value=mock_run), \
+         patch('src.models.train_model.mlflow.log_params'), \
+         patch('src.models.train_model.mlflow.log_metric'), \
+         patch('src.models.train_model.mlflow.sklearn.log_model'), \
+         patch('src.models.train_model.EmissionsTracker', return_value=mock_tracker), \
+         patch('src.models.train_model.mlflow.end_run'), \
+         patch('src.models.train_model.DAGSHUB_USERNAME', None), \
+         patch('src.models.train_model.DAGSHUB_REPO', None):
+        yield
+
+
+def test_load_data():
     train_data, test_data = process_data()
     assert train_data is not None
     assert test_data is not None
-    assert len(train_data) > 0  # Check that there are rows in the data
-    assert 'Crop' in train_data.columns  # Ensure the 'Crop' column exists
+    assert len(train_data) > 0
+    assert 'Crop' in train_data.columns
 
 
 def test_data_not_found():
-    """Test if the function raises an error when data file is missing."""
-
-    with patch('src.data.make_dataset.pd.read_csv', side_effect=FileNotFoundError("File not found")):
+    with patch('src.data.make_dataset.pd.read_csv',
+               side_effect=FileNotFoundError("File not found")):
         with pytest.raises(FileNotFoundError):
             process_data()
 
 
 def test_train_model():
-    """Test if the model can be trained."""
-    # Load the data
-    train_data, _ = process_data()
-    X = train_data.drop('Crop', axis=1)
-    y = train_data['Crop']
     model, label_encoder = train()
-
-    # Ensure the model and encoder are created
     assert model is not None
     assert label_encoder is not None
 
 
 def test_data_columns():
-    """ Test if the processed data has the expected columns """
     train_data, _ = process_data()
     expected_columns = [
-        'Nitrogen',
-        'Phosphorus',
-        'Potassium',
-        'Temperature',
-        'Humidity',
-        'pH_Value',
-        'Rainfall',
-        'Crop'
-        ]
-
+        'Nitrogen', 'Phosphorus', 'Potassium',
+        'Temperature', 'Humidity', 'pH_Value',
+        'Rainfall', 'Crop'
+    ]
     for column in expected_columns:
         assert column in train_data.columns
-        assert train_data[column].isnull().sum() == 0  # Check for missing values
+        assert train_data[column].isnull().sum() == 0
 
 
 def test_train_data_not_found():
-    """Test if the function raises an error when data file is missing."""
-    mock_model = MagicMock()
-    mock_label_encoder = MagicMock()
-    with patch('joblib.load', side_effect=[mock_model, mock_label_encoder]), \
-        patch('pandas.read_csv', side_effect=FileNotFoundError("File not found")), \
-        patch('mlflow.set_experiment'), \
-        patch('mlflow.start_run'), \
-        patch('mlflow.end_run'):
+    with patch('src.models.train_model.pd.read_csv',
+               side_effect=FileNotFoundError("File not found")):
         with pytest.raises(FileNotFoundError):
             train()
 

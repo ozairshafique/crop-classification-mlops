@@ -73,6 +73,23 @@ def test_train_data_not_found():
         with pytest.raises(FileNotFoundError):
             train()
 
+def test_process_data():
+    mock_data = pd.DataFrame({
+        'Nitrogen': [90, 85],
+        'Phosphorus': [42, 40],
+        'Potassium': [49, 45],
+        'Temperature': [20.82, 22.5],
+        'Humidity': [82, 80],
+        'pH_Value': [6.5, 6.8],
+        'Rainfall': [202.82, 150.0],
+        'Crop': ['Rice', 'Wheat']
+    })
+    with patch('os.path.exists', return_value=True), \
+         patch('pandas.read_csv', return_value=mock_data):
+        train_data, test_data = process_data()
+        assert 'Nitrogen' in train_data.columns
+        assert 'Crop' in train_data.columns
+        assert len(train_data) + len(test_data) == 2
 
 if __name__ == "__main__":
     pytest.main()

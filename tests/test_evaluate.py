@@ -13,7 +13,25 @@ from src.models.evaluate import evaluate, setup_mlflow, MLFLOW_TRACKING_URI
 from unittest.mock import patch, MagicMock
 
 
+@pytest.fixture(autouse=True)
+def mock_mlflow_all():
+    mock_run = MagicMock()
+    mock_run.return_value.__enter__.return_value = MagicMock(return_value=None)
+    mock_run.return_value.__exit__.return_value = MagicMock(return_value=False)
+    mock_tracker = MagicMock()
+    mock_tracker.stop.return_value = 0.0001
 
+    with patch('src.models.evaluate.mlflow.set_tracking_uri'), \
+        patch('src.models.evaluate.mlflow.set_experiment'), \
+        patch('src.models.evaluate.mlflow.start_run', return_value=mock_run), \
+        patch('src.models.evaluate.mlflow.sklearn.log_model'), \
+        patch('src.models.evaluate.mlflow.log_params'), \
+        patch('src.models.evaluate.DAGSHUB_USERNAME', None), \
+        patch('src.models.evaluate.DAGSHUB_REPO', None), \
+        patch('src.models.evaluate.mlflow.log_metric'), \
+        patch('src.models.evaluate.EmissionsTracker', return_value=mock_tracker), \
+        patch('src.models.evaluate.mlflow.end_run'):
+        yield
 
 # This is a test function
 def test_evaluate():

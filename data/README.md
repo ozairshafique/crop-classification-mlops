@@ -52,6 +52,26 @@ Please refer to Kaggle's terms of use.
 | pH Value    | 3.50  | 9.94   | 6.47   |
 | Rainfall    | 20.21 | 298.56 | 103.46 |
 
+---
+
+## Crop Classes (22)
+
+| #   | Crop        | #   | Crop       |
+| --- | ----------- | --- | ---------- |
+| 1   | Rice        | 12  | Mango      |
+| 2   | Maize       | 13  | Grapes     |
+| 3   | Chickpea    | 14  | Watermelon |
+| 4   | KidneyBeans | 15  | Muskmelon  |
+| 5   | PigeonPeas  | 16  | Apple      |
+| 6   | MothBeans   | 17  | Orange     |
+| 7   | MungBean    | 18  | Papaya     |
+| 8   | Blackgram   | 19  | Coconut    |
+| 9   | Lentil      | 20  | Cotton     |
+| 10  | Pomegranate | 21  | Jute       |
+| 11  | Banana      | 22  | Coffee     |
+
+---
+
 ## Dataset Usage
 
 ### Example Use Cases:
@@ -61,8 +81,8 @@ Please refer to Kaggle's terms of use.
 
 ### Data Preprocessing:
 
-- **Missing Values**: Any missing data has been handled by removing the rows with missing values.
-- **Normalization**: Feature scaling was applied to the numerical variables to normalize the data.
+- **Missing Values**: No missing values present in the original dataset.
+- **Normalization**: Features kept in raw scale — Random Forest does not require feature scaling.
 - **Label Encoding**: The target variable (crop) has been label-encoded for machine learning purposes.
 
 ### Train-Test Split:
@@ -86,7 +106,7 @@ This file can be used for:
 
 - Training machine learning models to predict the best crop for given environmental conditions.
 - Conducting data analysis to understand the relationship between environmental factors and crop suitability.
-- Supporting decision-making processes in agricultural planning and management.
+- Supporting decision-making processes in agricultural planning decisions and management.
 
 ### Notes
 

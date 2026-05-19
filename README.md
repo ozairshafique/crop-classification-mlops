@@ -1,5 +1,7 @@
 # 🌾 Crop Classification MLOps Pipeline
 
+<div align="center">
+
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111.0-green.svg)](https://fastapi.tiangolo.com)
 [![MLflow](https://img.shields.io/badge/MLflow-2.19.0-orange.svg)](https://mlflow.org)
@@ -10,32 +12,83 @@
 [![Grafana](https://img.shields.io/badge/Grafana-Dashboard-orange.svg)](https://grafana.com)
 [![Locust](https://img.shields.io/badge/Locust-Load%20Testing-green.svg)](https://locust.io)
 [![AWS](https://img.shields.io/badge/AWS-EC2%20Deployed-orange.svg)](https://aws.amazon.com)
+[![Coverage](https://img.shields.io/badge/Coverage-93%25-brightgreen.svg)]()
 [![CI/CD](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci-cd.yml)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Live%20Demo-yellow)](https://huggingface.co/spaces/ozair1112/crop-classifications)
 
-> A production-grade **end-to-end MLOps pipeline** for crop classification
-> that predicts the most suitable crop based on soil and environmental
-> conditions. Built with industry-standard tools including FastAPI, Docker,
-> MLflow, DVC, Prometheus, Grafana, and Great Expectations.
+**A production-grade end-to-end MLOps pipeline for agricultural crop recommendation.**
+Predicts the optimal crop based on soil nutrients and environmental conditions using a Random Forest classifier with 94.32% accuracy.
 
----
+[🚀 Live Demo](https://huggingface.co/spaces/ozair1112/crop-classifications) · [📖 API Docs](http://63.180.13.157:8001/docs) · [🔬 Experiments](https://dagshub.com/ushafique/CropClassification.mlflow) · [🐳 Docker Hub](https://hub.docker.com/r/ozairshafique/crops-classifications)
 
-## 📊 Monitoring Dashboard
-
-![Grafana Dashboard](images/grafana-dashboard.jpeg)
+</div>
 
 ---
 
-## 🎯 Model Performance
+## 📋 Table of Contents
 
-| Metric           | Score        |
-| ---------------- | ------------ |
-| **Accuracy**     | **94.32%**   |
-| **Precision**    | **96.30%**   |
-| **Recall**       | **94.32%**   |
-| **F1-Score**     | **93.33%**   |
-| **Classes**      | **22 crops** |
-| **Test Samples** | **440**      |
+- [Overview](#-overview)
+- [Live Demo](#-live-demo)
+- [Model Performance](#-model-performance)
+- [Architecture](#-architecture)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Quick Start](#-quick-start)
+- [API Reference](#-api-reference)
+- [Monitoring](#-monitoring)
+- [Load Testing](#-load-testing)
+- [CI/CD Pipeline](#-cicd-pipeline)
+- [Testing](#-testing)
+- [Carbon Footprint](#-carbon-footprint)
+- [Contributing](#-contributing)
+
+---
+
+## 🎯 Overview
+
+This project demonstrates a **complete MLOps lifecycle** — from raw data ingestion to a monitored, containerized, cloud-deployed ML system. It is not just a model; it is a full production system built with the same tools and practices used in industry.
+
+**What makes this different from a typical ML project:**
+
+- Data is versioned with **DVC** and stored remotely on **DagsHub** — reproducible at any point in time
+- Every experiment is tracked in **MLflow** — no results are ever lost
+- Data quality is enforced with **Great Expectations** before any training runs
+- The API is monitored in real-time with **Prometheus + Grafana**
+- Load tested at **100 concurrent users with 0% failure rate**
+- Fully automated **CI/CD** from code push to AWS EC2 deployment
+- Carbon emissions tracked on every training and inference run
+
+---
+
+## 🌐 Live Demo
+
+| Service                        | URL                                                                                           | Status                                                              |
+| ------------------------------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 🤗 Hugging Face (Streamlit UI) | [crop-classifications.hf.space](https://huggingface.co/spaces/ozair1112/crop-classifications) | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
+| ⚡ FastAPI (REST API)          | [63.180.13.157:8001/docs](http://63.180.13.157:8001/docs)                                     | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
+| 🔬 MLflow (Experiments)        | [DagsHub](https://dagshub.com/ushafique/CropClassification.mlflow)                            | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
+
+---
+
+## 📊 Model Performance
+
+| Metric               | Score           |
+| -------------------- | --------------- |
+| **Accuracy**         | **94.32%**      |
+| **Precision**        | **96.30%**      |
+| **Recall**           | **94.32%**      |
+| **F1-Score**         | **93.33%**      |
+| **Classes**          | **22 crops**    |
+| **Training Samples** | **1,760 (80%)** |
+| **Test Samples**     | **440 (20%)**   |
+| **Model Size**       | **799 kB**      |
+
+---
+
+## 🏗️ Architecture
+
+![Architecture Diagram](images/architecture_diagrams.png)
 
 ---
 
@@ -47,103 +100,19 @@
 | **ML Framework**        | Scikit-learn             |
 | **Model**               | Random Forest Classifier |
 | **API**                 | FastAPI + Uvicorn        |
+| **Frontend**            | Streamlit                |
 | **Experiment Tracking** | MLflow + DagsHub         |
 | **Data Versioning**     | DVC + DagsHub            |
-| **Monitoring**          | Prometheus + Grafana     |
 | **Data Validation**     | Great Expectations       |
+| **Monitoring**          | Prometheus + Grafana     |
 | **Carbon Tracking**     | CodeCarbon               |
 | **Load Testing**        | Locust                   |
 | **Containerization**    | Docker + Docker Compose  |
-| **Testing**             | Pytest                   |
+| **Testing**             | Pytest + Coverage (93%)  |
 | **Code Quality**        | Flake8 + Pylint          |
 | **CI/CD**               | GitHub Actions           |
-| **Cloud**               | AWS EC2                  |
-
----
-
-## 🏗️ Architecture
-
-```
-Raw Data (DVC + DagsHub)
-   ↓
-Data Validation (Great Expectations)
-   ↓
-Data Processing (make_dataset.py)
-   ↓
-Model Training (Random Forest)
-   ↓
-Experiment Tracking (MLflow + DagsHub)
-   ↓
-Model Evaluation (94.32% accuracy)
-   ↓
-FastAPI REST API
-   ↓
-Docker Compose (Full Stack)
-   ↓
-Monitoring (Prometheus + Grafana)
-   ↓
-Load Testing (Locust)
-   ↓
-CI/CD (GitHub Actions → AWS EC2)
-```
-
----
-
-## 📈 MLflow Experiments
-
-![MLflow Experiments](images/mlflow-experiments.jpeg)
-
-🔗 [View all experiments on DagsHub](https://dagshub.com/ushafique/CropClassification.mlflow)
-
----
-
-## 🌐 API Documentation
-
-![API Swagger](images/fastapi.jpeg)
-
-🔗 Live API: [http://63.180.13.157:8001/docs](http://63.180.13.157:8001/docs)
-
----
-
-## 🔥 Load Testing Results
-
-Tested with **100 concurrent users** at **42.5 RPS** — **0% failure rate**:
-
-![Locust Load Testing](images/locust_results.png)
-
-| Endpoint         | Requests   | Failures | Median (ms) | 90th % (ms) | RPS      |
-| ---------------- | ---------- | -------- | ----------- | ----------- | -------- |
-| POST /predict    | 6,039      | 0        | 340         | 1,100       | 22.6     |
-| GET /summary     | 1,227      | 0        | 330         | 800         | 5.5      |
-| GET /model-info  | 2,312      | 0        | 31          | 190         | 7.6      |
-| GET /performance | 1,103      | 0        | 47          | 220         | 3.3      |
-| GET /health      | 100        | 0        | 16          | 62          | 0.0      |
-| **Aggregated**   | **11,951** | **0**    | **160**     | **880**     | **42.5** |
-
-✅ **0% failure rate** with 100 concurrent users
-
----
-
-## 🌱 Carbon Footprint
-
-![Energy Label](images/carbon-energy-labels.jpg)
-
-| Metric            | Value  |
-| ----------------- | ------ |
-| CO2 per Training  | ~0.0 g |
-| CO2 per Inference | ~0.0 g |
-| Model Size        | 799 kB |
-| Energy Rating     | A      |
-
-Carbon tracked using [CodeCarbon](https://codecarbon.io/)
-
-### 📈 Emissions Timeline
-
-![Carbon Emissions Chart](images/carbon-emissions-charts.png)
-
-### 📊 Emissions Per Training Run
-
-![Carbon Emissions Details](images/carbon-emissions-detaileds.png)
+| **Cloud**               | AWS EC2 (t3.small)       |
+| **Registry**            | Docker Hub               |
 
 ---
 
@@ -154,62 +123,73 @@ crop-classification-mlops/
 │
 ├── apis/                          # FastAPI application
 │   ├── __init__.py
-│   ├── main.py                    # FastAPI app & endpoints
-│   └── schemas.py                 # Pydantic schemas
+│   ├── main.py                    # App, endpoints, Prometheus metrics
+│   └── schemas.py                 # Pydantic request/response schemas
 │
-├── src/                           # Core source code
+├── src/                           # Core ML source code
 │   ├── data/
-│   │   └── make_dataset.py        # Data processing
+│   │   └── make_dataset.py        # Data ingestion and processing
 │   ├── data_validation/
-│   │   └── data_expectations.py   # Great Expectations validation
-│   └── models/
-│       ├── evaluate.py            # Model evaluation
-│       ├── predict_model.py       # Model prediction
-│       └── train_model.py         # Model training
+│   │   └── data_expectations.py   # Great Expectations validation suite
+│   ├── features/
+│   │   └── build_features.py      # Feature engineering
+│   ├── models/
+│   │   ├── evaluate.py            # Evaluation + MLflow logging
+│   │   ├── predict_model.py       # Inference logic
+│   │   └── train_model.py         # Training + MLflow + CodeCarbon
+│   └── visualization/
+│       └── visualize.py           # Plot generation
 │
 ├── data/
 │   ├── README.md                  # Dataset documentation
-│   ├── raw/                       # Raw CSV data (DVC)
-│   └── processed/                 # Processed data (DVC)
+│   ├── raw/                       # Raw CSV (DVC tracked)
+│   └── processed/                 # Train/test splits (DVC tracked)
 │
 ├── models/
-│   ├── model.pkl                  # Trained model (DVC)
-│   ├── label_encoder.pkl          # Label encoder (DVC)
-│   └── metrics.json               # Model metrics
+│   ├── model.pkl                  # Trained model (DVC tracked)
+│   ├── label_encoder.pkl          # Label encoder (DVC tracked)
+│   └── metrics.json               # Evaluation metrics
 │
 ├── reports/
 │   ├── model_card.md              # Model card
 │   ├── report.md                  # Evaluation report
-│   └── train_model_emissions_report.txt
+│   └── train_model_emissions_report.txt  # Carbon report
 │
 ├── tests/
-│   ├── __init__.py
-│   ├── locustfile.py              # Load tests
-│   ├── test_evaluate.py           # Evaluation tests
-│   └── test_train_model.py        # Training tests
+│   ├── conftest.py                # Pytest configuration + sys.path fix
+│   ├── locustfile.py              # Load testing scenarios
+│   ├── test_api.py                # API endpoint unit tests
+│   ├── test_evaluate.py           # Evaluation unit tests
+│   └── test_train_model.py        # Training unit tests
 │
 ├── grafana/
-│   └── dashboard.json             # Grafana dashboard config
+│   └── dashboard.json             # Grafana dashboard (importable)
 │
-├── gx/                            # Great Expectations
+├── gx/                            # Great Expectations project
 │   ├── checkpoints/
 │   └── expectations/
 │
-├── images/                        # README images
+├── images/                        # README screenshots
 │
 ├── .github/
 │   └── workflows/
-│       └── ci-cd.yml              # CI/CD pipeline
+│       └── ci-cd.yml              # Full CI/CD pipeline
+│
+├── app/
+│   └── streamlit_app.py           # Streamlit UI
 │
 ├── dvc.yaml                       # DVC pipeline stages
-├── dvc.lock                       # DVC lock file
-├── Dockerfile
-├── docker-compose.yml
-├── prometheus.yml
-├── requirements.txt
-├── pytest.ini
-├── .flake8
-├── .env.example
+├── dvc.lock                       # DVC reproducibility lock
+├── Dockerfile                     # FastAPI image
+├── Dockerfile.streamlit           # Streamlit image
+├── docker-compose.yml             # Full stack orchestration
+├── prometheus.yml                 # Prometheus scrape config
+├── requirements.txt               # FastAPI dependencies
+├── requirements-streamlit.txt     # Streamlit dependencies
+├── pytest.ini                     # Pytest + coverage config
+├── .coveragerc                    # Coverage exclusions
+├── .flake8                        # Linting config
+├── .env.example                   # Environment template
 ├── .gitignore
 └── README.md
 ```
@@ -220,9 +200,10 @@ crop-classification-mlops/
 
 ### Prerequisites
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) 24+
 - [Git](https://git-scm.com/)
 - Python 3.12+
+- DagsHub account (for DVC + MLflow)
 
 ### 1. Clone Repository
 
@@ -237,7 +218,7 @@ cd crop-classification-mlops
 cp .env.example .env
 ```
 
-Edit `.env` with your values:
+Edit `.env`:
 
 ```env
 DAGSHUB_USERNAME=yourusername
@@ -246,6 +227,7 @@ DAGSHUB_TOKEN=yourtoken
 MLFLOW_TRACKING_URI=https://dagshub.com/yourusername/CropClassification.mlflow
 GRAFANA_ADMIN_USER=admin
 GRAFANA_ADMIN_PASSWORD=yourpassword
+API_URL=http://app:8000
 ```
 
 ### 3. Pull Data with DVC
@@ -258,7 +240,7 @@ dvc remote modify dagshub --local password your_token
 dvc pull -r dagshub --force
 ```
 
-### 4. Run with Docker
+### 4. Run Full Stack with Docker
 
 ```bash
 docker compose up -d
@@ -266,65 +248,50 @@ docker compose up -d
 
 ### 5. Access Services
 
-| Service        | URL                        | Description |
-| -------------- | -------------------------- | ----------- |
-| **FastAPI**    | http://localhost:8001      | REST API    |
-| **API Docs**   | http://localhost:8001/docs | Swagger UI  |
-| **Prometheus** | http://localhost:9091      | Metrics     |
-| **Grafana**    | http://localhost:3002      | Dashboard   |
+| Service          | URL                        | Credentials          |
+| ---------------- | -------------------------- | -------------------- |
+| **Streamlit UI** | http://localhost:8501      | —                    |
+| **FastAPI**      | http://localhost:8001      | —                    |
+| **API Docs**     | http://localhost:8001/docs | —                    |
+| **Prometheus**   | http://localhost:9091      | —                    |
+| **Grafana**      | http://localhost:3002      | admin / yourpassword |
 
 ---
 
-## 💻 Local Development
-
-### 1. Create Virtual Environment
+## 💻 Local Development (without Docker)
 
 ```bash
+# Create virtual environment
 python -m venv envs
+source envs/bin/activate        # Linux/Mac
+envs\Scripts\activate           # Windows
 
-# Windows
-envs\Scripts\activate
-
-# Linux/Mac
-source envs/bin/activate
-```
-
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
-### 3. Run DVC Pipeline
-
-```bash
+# Run DVC pipeline (data → train → evaluate)
 dvc repro
-```
 
-### 4. Run API
-
-```bash
+# Start API
 uvicorn apis.main:app --reload --port 8000
 ```
 
 ---
 
-## 📡 API Endpoints
+## 📡 API Reference
 
-| Method | Endpoint       | Description           |
-| ------ | -------------- | --------------------- |
-| GET    | `/`            | Root — API info       |
-| GET    | `/health`      | Health check          |
-| GET    | `/docs`        | Swagger documentation |
-| GET    | `/summary`     | Dataset summary       |
-| GET    | `/performance` | Model performance     |
-| GET    | `/model-info`  | Model information     |
-| POST   | `/predict`     | Crop prediction       |
-| GET    | `/metrics`     | Prometheus metrics    |
+| Method | Endpoint       | Description                               |
+| ------ | -------------- | ----------------------------------------- |
+| GET    | `/`            | Root — API info and version               |
+| GET    | `/health`      | Health check — returns `{"status": "ok"}` |
+| GET    | `/docs`        | Swagger UI documentation                  |
+| GET    | `/summary`     | Dataset statistics summary                |
+| GET    | `/performance` | Model accuracy, precision, recall, F1     |
+| GET    | `/model-info`  | Hyperparameters and model details         |
+| POST   | `/predict`     | Crop prediction                           |
+| GET    | `/metrics`     | Prometheus metrics endpoint               |
 
-### Prediction Example
-
-**Request:**
+### Prediction Request
 
 ```bash
 curl -X POST http://localhost:8001/predict \
@@ -340,7 +307,7 @@ curl -X POST http://localhost:8001/predict \
   }'
 ```
 
-**Response:**
+### Prediction Response
 
 ```json
 {
@@ -358,64 +325,130 @@ curl -X POST http://localhost:8001/predict \
 }
 ```
 
+### Input Feature Ranges
+
+| Feature     | Unit  | Min | Max | Description             |
+| ----------- | ----- | --- | --- | ----------------------- |
+| Nitrogen    | kg/ha | 0   | 140 | Soil nitrogen content   |
+| Phosphorus  | kg/ha | 0   | 145 | Soil phosphorus content |
+| Potassium   | kg/ha | 0   | 205 | Soil potassium content  |
+| Temperature | °C    | 0   | 50  | Average temperature     |
+| Humidity    | %     | 0   | 100 | Relative humidity       |
+| pH_Value    | pH    | 0   | 14  | Soil pH level           |
+| Rainfall    | mm    | 0   | 300 | Annual rainfall         |
+
 ---
 
-## 🧪 Testing
+## 📈 Monitoring
 
-### Unit Tests
+### Grafana Dashboard
 
-```bash
-pytest tests/ -v --cov=src/
-```
+![Grafana Dashboard](images/grafana-dashboard.jpeg)
 
-### Load Testing with Locust
+Import `grafana/dashboard.json` into Grafana to get:
+
+| Panel                 | Metric               |
+| --------------------- | -------------------- |
+| Total Requests        | HTTP request counter |
+| Error Rate            | 5xx error percentage |
+| App Health            | UP/DOWN status       |
+| Total Predictions     | Prediction counter   |
+| Requests Per Minute   | Throughput chart     |
+| Average Response Time | P50/P90/P99 latency  |
+
+### MLflow Experiments
+
+![MLflow Experiments](images/mlflow-experiments.jpeg)
+
+Every training run logs: accuracy, precision, recall, F1, hyperparameters, model artifact, and carbon emissions.
+
+🔗 [View all experiments on DagsHub](https://dagshub.com/ushafique/CropClassification.mlflow)
+
+---
+
+## 🔥 Load Testing
+
+Tested with **Locust** at 100 concurrent users — **0% failure rate**:
+
+![Locust Load Testing](images/locust_results.png)
+
+| Endpoint         | Requests   | Failures | Median (ms) | P90 (ms) | RPS      |
+| ---------------- | ---------- | -------- | ----------- | -------- | -------- |
+| POST /predict    | 6,039      | 0        | 340         | 1,100    | 22.6     |
+| GET /summary     | 1,227      | 0        | 330         | 800      | 5.5      |
+| GET /model-info  | 2,312      | 0        | 31          | 190      | 7.6      |
+| GET /performance | 1,103      | 0        | 47          | 220      | 3.3      |
+| GET /health      | 100        | 0        | 16          | 62       | 0.0      |
+| **Aggregated**   | **11,951** | **0**    | **160**     | **880**  | **42.5** |
+
+Run load tests yourself:
 
 ```bash
 locust -f tests/locustfile.py --host=http://localhost:8001
 ```
 
-Open http://localhost:8089:
-
-| Setting    | Value                 |
-| ---------- | --------------------- |
-| Users      | 100                   |
-| Spawn rate | 10/sec                |
-| Host       | http://localhost:8001 |
+Open http://localhost:8089 → set Users: 100, Spawn rate: 10/sec.
 
 ---
 
 ## 🔄 CI/CD Pipeline
 
-GitHub Actions runs automatically on every push to `main` or `dev`:
+Every push to `main` or `dev` triggers the full pipeline automatically:
 
-```
-Push to main/dev
-     ↓
-Code Quality (Flake8 + Pylint)
-     ↓
-Run Tests (DVC + Pytest)
-     ↓
-Build Docker Image
-     ↓
-Push to Docker Hub
-     ↓
-Deploy to AWS EC2
-     ↓
-Health Check ✅
-```
+![CI/CD Pipeline](images/cicd_pipelines.png)
+
+### Required GitHub Secrets
+
+| Secret             | Description          |
+| ------------------ | -------------------- |
+| `DAGSHUB_USERNAME` | DagsHub username     |
+| `DAGSHUB_TOKEN`    | DagsHub access token |
+| `DOCKER_USERNAME`  | Docker Hub username  |
+| `DOCKER_PASSWORD`  | Docker Hub password  |
+| `EC2_HOST`         | AWS EC2 public IP    |
+| `EC2_SECRET_KEY`   | EC2 SSH private key  |
 
 ---
 
-## 🗂️ Data Validation
+## 🧪 Testing
 
-Using Great Expectations:
+```bash
+# Run all tests with coverage
+pytest tests/ -v --cov=apis --cov=src --cov-report=html
 
-| Validation       | Description               |
-| ---------------- | ------------------------- |
-| Column existence | All 8 columns present     |
-| Value ranges     | Nitrogen 0-140, pH 0-14   |
-| Null checks      | No missing values allowed |
-| Data types       | Numeric columns verified  |
+# Run specific test file
+pytest tests/test_evaluate.py -v
+
+# Load testing
+locust -f tests/locustfile.py --host=http://localhost:8001
+```
+
+### Coverage Report
+
+| File              | Coverage |
+| ----------------- | -------- |
+| `apis/main.py`    | 89%      |
+| `make_dataset.py` | 92%      |
+| `train_model.py`  | 93%      |
+| `evaluate.py`     | 100%     |
+| **Total**         | **93%**  |
+
+---
+
+## 🌱 Carbon Footprint
+
+![Energy Label](images/carbon-energy-labels.jpg)
+
+| Metric            | Value  |
+| ----------------- | ------ |
+| CO2 per Training  | ~0.0 g |
+| CO2 per Inference | ~0.0 g |
+| Model Size        | 799 kB |
+| Energy Rating     | **A**  |
+
+Carbon tracked using [CodeCarbon](https://codecarbon.io/) on every training and inference run.
+
+![Carbon Emissions Chart](images/carbon-emissions-charts.png)
 
 ---
 
@@ -428,65 +461,70 @@ Using Great Expectations:
 | max_depth         | 15                       |
 | min_samples_split | 2                        |
 | random_state      | 42                       |
-| Training samples  | 1,760 (80%)              |
-| Test samples      | 440 (20%)                |
+| Data split        | 80 / 20                  |
 
 ---
 
-## 📊 Grafana Dashboard
+## 🗂️ Data Validation
 
-Import `grafana/dashboard.json` to get:
+Great Expectations validates every dataset before training:
 
-| Panel                 | Description        |
-| --------------------- | ------------------ |
-| Total Requests        | Request counter    |
-| Error Rate            | 5xx error monitor  |
-| App Health            | UP/DOWN status     |
-| Total Predictions     | Prediction counter |
-| Requests Per Minute   | Request rate chart |
-| Average Response Time | Latency chart      |
-
----
-
-## 📋 Documentation
-
-| Document                                                     | Description               |
-| ------------------------------------------------------------ | ------------------------- |
-| [Model Card](reports/model_card.md)                          | Model details and metrics |
-| [Evaluation Report](reports/report.md)                       | Performance analysis      |
-| [Dataset Card](data/README.md)                               | Dataset documentation     |
-| [Emissions Report](reports/train_model_emissions_report.txt) | Carbon footprint          |
+| Check             | Rule                          |
+| ----------------- | ----------------------------- |
+| Column existence  | All 8 columns must be present |
+| Nitrogen range    | 0 – 140 kg/ha                 |
+| Phosphorus range  | 0 – 145 kg/ha                 |
+| Potassium range   | 0 – 205 kg/ha                 |
+| Temperature range | 0 – 50 °C                     |
+| Humidity range    | 0 – 100 %                     |
+| pH range          | 0 – 14                        |
+| Rainfall range    | 0 – 300 mm                    |
+| Null checks       | No missing values allowed     |
 
 ---
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create feature branch
+2. Create a feature branch
 
 ```bash
 git checkout -b feature/your-feature
 ```
 
-3. Commit changes
+3. Commit with conventional commits
 
 ```bash
 git commit -m "feat: add your feature"
+git commit -m "fix: fix a bug"
+git commit -m "docs: update README"
 ```
 
-4. Push to branch
+4. Run tests before pushing
+
+```bash
+pytest --cov=apis --cov=src --cov-report=term-missing
+```
+
+5. Push and open a Pull Request
 
 ```bash
 git push origin feature/your-feature
 ```
 
-5. Open Pull Request
+CI/CD runs automatically on every PR — all checks must pass before merging.
 
 ---
 
-## 📄 License
+## 📃 Documentation
 
-MIT License — see [LICENSE](LICENSE) for details.
+| Document                                                     | Description                                  |
+| ------------------------------------------------------------ | -------------------------------------------- |
+| [Model Card](reports/model_card.md)                          | Model details, limitations, and intended use |
+| [Evaluation Report](reports/report.md)                       | Full performance analysis                    |
+| [Dataset Card](data/README.md)                               | Dataset source, schema, and statistics       |
+| [Emissions Report](reports/train_model_emissions_report.txt) | Carbon footprint per run                     |
+| [API Docs](http://63.180.13.157:8001/docs)                   | Live Swagger UI                              |
 
 ---
 
@@ -497,26 +535,27 @@ MIT License — see [LICENSE](LICENSE) for details.
 - 🐙 GitHub: [@ozairshafique](https://github.com/ozairshafique)
 - 🔬 DagsHub: [@ushafique](https://dagshub.com/ushafique)
 - 💼 LinkedIn: [uzair-shafique](https://www.linkedin.com/in/uzair-shafique-97836810a)
+- 🤗 HuggingFace: [@ozair1112](https://huggingface.co/ozair1112)
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
 ## 🙏 Acknowledgements
 
-- Dataset: [Kaggle — Crop Recommendation](https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [MLflow](https://mlflow.org/)
-- [DVC](https://dvc.org/)
-- [DagsHub](https://dagshub.com/)
-- [Great Expectations](https://greatexpectations.io/)
-- [CodeCarbon](https://codecarbon.io/)
-- [Locust](https://locust.io/)
-- [Prometheus](https://prometheus.io/)
-- [Grafana](https://grafana.com/)
+- Dataset: [Kaggle — Crop Recommendation Dataset](https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset)
+- [FastAPI](https://fastapi.tiangolo.com/) · [MLflow](https://mlflow.org/) · [DVC](https://dvc.org/) · [DagsHub](https://dagshub.com/) · [Great Expectations](https://greatexpectations.io/) · [CodeCarbon](https://codecarbon.io/) · [Locust](https://locust.io/) · [Prometheus](https://prometheus.io/) · [Grafana](https://grafana.com/)
 
 ---
 
 <div align="center">
 
 ⭐ **Star this repo if you found it helpful!** ⭐
+
+**Built with ❤️ by [Uzair Shafique](https://github.com/ozairshafique)**
 
 </div>

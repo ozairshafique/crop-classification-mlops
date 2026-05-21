@@ -11,20 +11,22 @@
 [![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-orange.svg)](https://prometheus.io)
 [![Grafana](https://img.shields.io/badge/Grafana-Dashboard-orange.svg)](https://grafana.com)
 [![Locust](https://img.shields.io/badge/Locust-Load%20Testing-green.svg)](https://locust.io)
-[![AWS](https://img.shields.io/badge/AWS-EC2%20Deployed-orange.svg)](https://aws.amazon.com)
+[![AWS](https://img.shields.io/badge/AWS-EC2%20Deployed-FF9900.svg?logo=amazonaws)](https://aws.amazon.com)
 [![Coverage](https://img.shields.io/badge/Coverage-93%25-brightgreen.svg)]()
-[![CI/CD](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci-cd.yml)
+[![CI/CD](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/ozairshafique/crop-classification-mlops/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Live%20Demo-yellow)](https://huggingface.co/spaces/ozair1112/crop-classifications)
 
-**A production-grade end-to-end MLOps pipeline for agricultural crop recommendation.**
-Predicts the optimal crop based on soil nutrients and environmental conditions using a Random Forest classifier with 94.32% accuracy.
+<br/>
 
-[🚀 Live Demo](https://huggingface.co/spaces/ozair1112/crop-classifications) · [📖 API Docs](http://63.180.13.157:8001/docs) · [🔬 Experiments](https://dagshub.com/ushafique/CropClassification.mlflow) · [🐳 Docker Hub](https://hub.docker.com/r/ozairshafique/crops-classifications)
+**A production-grade end-to-end MLOps pipeline for agricultural crop recommendation.**
+Predicts the optimal crop based on soil nutrients and environmental conditions using a Random Forest classifier with **94.32% accuracy** across **22 crop types**.
+
+<br/>
+
+[🚀 Live Demo](https://huggingface.co/spaces/ozair1112/crop-classifications) · [📖 API Docs](http://63.180.13.157:8001/docs) · [🔬 MLflow Experiments](https://dagshub.com/ushafique/CropClassification.mlflow) · [🐳 Docker Hub](https://hub.docker.com/r/yourwhale/crops-classifications)
 
 </div>
-
----
 
 ## 📋 Table of Contents
 
@@ -41,33 +43,40 @@ Predicts the optimal crop based on soil nutrients and environmental conditions u
 - [CI/CD Pipeline](#-cicd-pipeline)
 - [Testing](#-testing)
 - [Carbon Footprint](#-carbon-footprint)
+- [Model Details](#-model-details)
+- [Data Validation](#-data-validation)
 - [Contributing](#-contributing)
+- [Documentation](#-documentation)
+- [Author](#-author)
 
 ---
 
 ## 🎯 Overview
 
-This project demonstrates a **complete MLOps lifecycle** — from raw data ingestion to a monitored, containerized, cloud-deployed ML system. It is not just a model; it is a full production system built with the same tools and practices used in industry.
+This project demonstrates a **complete MLOps lifecycle** — from raw data ingestion to a monitored, containerized, and cloud-deployed ML system. It is not just a model; it is a full production system built with the same tools and practices used in industry.
 
 **What makes this different from a typical ML project:**
 
-- Data is versioned with **DVC** and stored remotely on **DagsHub** — reproducible at any point in time
-- Every experiment is tracked in **MLflow** — no results are ever lost
-- Data quality is enforced with **Great Expectations** before any training runs
-- The API is monitored in real-time with **Prometheus + Grafana**
-- Load tested at **100 concurrent users with 0% failure rate**
-- Fully automated **CI/CD** from code push to AWS EC2 deployment
-- Carbon emissions tracked on every training and inference run
+| Feature                  | Details                                                                       |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| **Reproducibility**      | Data versioned with DVC + DagsHub — every experiment is reproducible          |
+| **Experiment tracking**  | Every run logged in MLflow — metrics, params, and artifacts never lost        |
+| **Data quality**         | Great Expectations enforces schema and value ranges before every training run |
+| **Real-time monitoring** | Prometheus scrapes metrics every 15s, Grafana dashboards show live API health |
+| **Load tested**          | 100 concurrent users, 42.5 RPS, **0% failure rate**                           |
+| **Full automation**      | One push to `main` triggers lint → test → build → deploy to AWS EC2           |
+| **Carbon tracking**      | CodeCarbon logs CO₂ emissions on every training and inference run             |
+| **Dual deployment**      | FastAPI backend on AWS EC2, Streamlit frontend on Hugging Face Spaces         |
 
 ---
 
 ## 🌐 Live Demo
 
-| Service                        | URL                                                                                           | Status                                                              |
-| ------------------------------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 🤗 Hugging Face (Streamlit UI) | [crop-classifications.hf.space](https://huggingface.co/spaces/ozair1112/crop-classifications) | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
-| ⚡ FastAPI (REST API)          | [63.180.13.157:8001/docs](http://63.180.13.157:8001/docs)                                     | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
-| 🔬 MLflow (Experiments)        | [DagsHub](https://dagshub.com/ushafique/CropClassification.mlflow)                            | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
+| Service               | URL                                                                                           | Status                                                              |
+| --------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 🤗 Streamlit UI       | [crop-classifications.hf.space](https://huggingface.co/spaces/ozair1112/crop-classifications) | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
+| ⚡ FastAPI REST API   | [63.180.13.157:8001/docs](http://63.180.13.157:8001/docs)                                     | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
+| 🔬 MLflow Experiments | [DagsHub](https://dagshub.com/ushafique/CropClassification.mlflow)                            | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
 
 ---
 
@@ -140,6 +149,9 @@ crop-classification-mlops/
 │   └── visualization/
 │       └── visualize.py           # Plot generation
 │
+├── app/
+│   └── streamlit_app.py           # Streamlit UI (Hugging Face)
+│
 ├── data/
 │   ├── README.md                  # Dataset documentation
 │   ├── raw/                       # Raw CSV (DVC tracked)
@@ -156,7 +168,6 @@ crop-classification-mlops/
 │   └── train_model_emissions_report.txt  # Carbon report
 │
 ├── tests/
-│   ├── conftest.py                # Pytest configuration + sys.path fix
 │   ├── locustfile.py              # Load testing scenarios
 │   ├── test_api.py                # API endpoint unit tests
 │   ├── test_evaluate.py           # Evaluation unit tests
@@ -173,10 +184,7 @@ crop-classification-mlops/
 │
 ├── .github/
 │   └── workflows/
-│       └── ci-cd.yml              # Full CI/CD pipeline
-│
-├── app/
-│   └── streamlit_app.py           # Streamlit UI
+│       └── ci.yml                 # Full CI/CD pipeline
 │
 ├── dvc.yaml                       # DVC pipeline stages
 ├── dvc.lock                       # DVC reproducibility lock
@@ -218,7 +226,7 @@ cd crop-classification-mlops
 cp .env.example .env
 ```
 
-Edit `.env`:
+Edit `.env` with your credentials:
 
 ```env
 DAGSHUB_USERNAME=yourusername
@@ -258,7 +266,7 @@ docker compose up -d
 
 ---
 
-## 💻 Local Development (without Docker)
+## 💻 Local Development
 
 ```bash
 # Create virtual environment
@@ -269,10 +277,10 @@ envs\Scripts\activate           # Windows
 # Install dependencies
 pip install -r requirements.txt
 
-# Run DVC pipeline (data → train → evaluate)
+# Run full DVC pipeline (data → train → evaluate)
 dvc repro
 
-# Start API
+# Start API server
 uvicorn apis.main:app --reload --port 8000
 ```
 
@@ -280,18 +288,18 @@ uvicorn apis.main:app --reload --port 8000
 
 ## 📡 API Reference
 
-| Method | Endpoint       | Description                               |
-| ------ | -------------- | ----------------------------------------- |
-| GET    | `/`            | Root — API info and version               |
-| GET    | `/health`      | Health check — returns `{"status": "ok"}` |
-| GET    | `/docs`        | Swagger UI documentation                  |
-| GET    | `/summary`     | Dataset statistics summary                |
-| GET    | `/performance` | Model accuracy, precision, recall, F1     |
-| GET    | `/model-info`  | Hyperparameters and model details         |
-| POST   | `/predict`     | Crop prediction                           |
-| GET    | `/metrics`     | Prometheus metrics endpoint               |
+| Method | Endpoint       | Description                        |
+| ------ | -------------- | ---------------------------------- |
+| GET    | `/`            | Root — API info and version        |
+| GET    | `/health`      | Health check — `{"status": "ok"}`  |
+| GET    | `/docs`        | Swagger UI documentation           |
+| GET    | `/summary`     | Dataset statistics                 |
+| GET    | `/performance` | Model metrics (accuracy, F1, etc.) |
+| GET    | `/model-info`  | Hyperparameters and model details  |
+| POST   | `/predict`     | Crop prediction                    |
+| GET    | `/metrics`     | Prometheus metrics scrape endpoint |
 
-### Prediction Request
+### Prediction Example
 
 ```bash
 curl -X POST http://localhost:8001/predict \
@@ -307,7 +315,7 @@ curl -X POST http://localhost:8001/predict \
   }'
 ```
 
-### Prediction Response
+**Response:**
 
 ```json
 {
@@ -368,7 +376,7 @@ Every training run logs: accuracy, precision, recall, F1, hyperparameters, model
 
 ## 🔥 Load Testing
 
-Tested with **Locust** at 100 concurrent users — **0% failure rate**:
+Tested with **Locust** at 100 concurrent users — **0% failure rate** at **42.5 RPS**:
 
 ![Locust Load Testing](images/locust_results.png)
 
@@ -387,7 +395,7 @@ Run load tests yourself:
 locust -f tests/locustfile.py --host=http://localhost:8001
 ```
 
-Open http://localhost:8089 → set Users: 100, Spawn rate: 10/sec.
+Open http://localhost:8089 → Users: 100, Spawn rate: 10/sec.
 
 ---
 
@@ -417,7 +425,9 @@ Every push to `main` or `dev` triggers the full pipeline automatically:
 pytest tests/ -v --cov=apis --cov=src --cov-report=html
 
 # Run specific test file
+pytest tests/test_api.py -v
 pytest tests/test_evaluate.py -v
+pytest tests/test_train_model.py -v
 
 # Load testing
 locust -f tests/locustfile.py --host=http://localhost:8001
@@ -425,13 +435,13 @@ locust -f tests/locustfile.py --host=http://localhost:8001
 
 ### Coverage Report
 
-| File              | Coverage |
-| ----------------- | -------- |
-| `apis/main.py`    | 89%      |
-| `make_dataset.py` | 92%      |
-| `train_model.py`  | 93%      |
-| `evaluate.py`     | 100%     |
-| **Total**         | **93%**  |
+| File                        | Coverage |
+| --------------------------- | -------- |
+| `apis/main.py`              | 89%      |
+| `src/data/make_dataset.py`  | 92%      |
+| `src/models/train_model.py` | 93%      |
+| `src/models/evaluate.py`    | 100%     |
+| **Total**                   | **93%**  |
 
 ---
 
@@ -441,8 +451,8 @@ locust -f tests/locustfile.py --host=http://localhost:8001
 
 | Metric            | Value  |
 | ----------------- | ------ |
-| CO2 per Training  | ~0.0 g |
-| CO2 per Inference | ~0.0 g |
+| CO₂ per Training  | ~0.0 g |
+| CO₂ per Inference | ~0.0 g |
 | Model Size        | 799 kB |
 | Energy Rating     | **A**  |
 
@@ -454,14 +464,16 @@ Carbon tracked using [CodeCarbon](https://codecarbon.io/) on every training and 
 
 ## 📦 Model Details
 
-| Parameter         | Value                    |
-| ----------------- | ------------------------ |
-| Algorithm         | Random Forest Classifier |
-| n_estimators      | 200                      |
-| max_depth         | 15                       |
-| min_samples_split | 2                        |
-| random_state      | 42                       |
-| Data split        | 80 / 20                  |
+| Parameter          | Value                    |
+| ------------------ | ------------------------ |
+| Algorithm          | Random Forest Classifier |
+| n_estimators       | 100                      |
+| max_depth          | 5                        |
+| min_samples_split  | 5                        |
+| random_state       | 42                       |
+| Train / test split | 80% / 20%                |
+| Training samples   | 1,760                    |
+| Test samples       | 440                      |
 
 ---
 
@@ -469,17 +481,17 @@ Carbon tracked using [CodeCarbon](https://codecarbon.io/) on every training and 
 
 Great Expectations validates every dataset before training:
 
-| Check             | Rule                          |
-| ----------------- | ----------------------------- |
-| Column existence  | All 8 columns must be present |
-| Nitrogen range    | 0 – 140 kg/ha                 |
-| Phosphorus range  | 0 – 145 kg/ha                 |
-| Potassium range   | 0 – 205 kg/ha                 |
-| Temperature range | 0 – 50 °C                     |
-| Humidity range    | 0 – 100 %                     |
-| pH range          | 0 – 14                        |
-| Rainfall range    | 0 – 300 mm                    |
-| Null checks       | No missing values allowed     |
+| Check            | Rule                          |
+| ---------------- | ----------------------------- |
+| Column existence | All 8 columns must be present |
+| Nitrogen         | 0 – 140 kg/ha                 |
+| Phosphorus       | 0 – 145 kg/ha                 |
+| Potassium        | 0 – 205 kg/ha                 |
+| Temperature      | 0 – 50 °C                     |
+| Humidity         | 0 – 100 %                     |
+| pH               | 0 – 14                        |
+| Rainfall         | 0 – 300 mm                    |
+| Null checks      | No missing values allowed     |
 
 ---
 
@@ -492,7 +504,7 @@ Great Expectations validates every dataset before training:
 git checkout -b feature/your-feature
 ```
 
-3. Commit with conventional commits
+3. Commit using conventional commits
 
 ```bash
 git commit -m "feat: add your feature"
@@ -503,10 +515,10 @@ git commit -m "docs: update README"
 4. Run tests before pushing
 
 ```bash
-pytest --cov=apis --cov=src --cov-report=term-missing
+pytest tests/ --cov=apis --cov=src --cov-report=term-missing
 ```
 
-5. Push and open a Pull Request
+5. Push and open a pull request
 
 ```bash
 git push origin feature/your-feature
@@ -516,7 +528,7 @@ CI/CD runs automatically on every PR — all checks must pass before merging.
 
 ---
 
-## 📃 Documentation
+## 📄 Documentation
 
 | Document                                                     | Description                                  |
 | ------------------------------------------------------------ | -------------------------------------------- |
@@ -535,7 +547,7 @@ CI/CD runs automatically on every PR — all checks must pass before merging.
 - 🐙 GitHub: [@ozairshafique](https://github.com/ozairshafique)
 - 🔬 DagsHub: [@ushafique](https://dagshub.com/ushafique)
 - 💼 LinkedIn: [uzair-shafique](https://www.linkedin.com/in/uzair-shafique-97836810a)
-- 🤗 HuggingFace: [@ozair1112](https://huggingface.co/ozair1112)
+- 🤗 Hugging Face: [@ozair1112](https://huggingface.co/ozair1112)
 
 ---
 
@@ -553,7 +565,6 @@ MIT License — see [LICENSE](LICENSE) for details.
 ---
 
 <div align="center">
-
 ⭐ **Star this repo if you found it helpful!** ⭐
 
 **Built with ❤️ by [Uzair Shafique](https://github.com/ozairshafique)**

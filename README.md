@@ -75,7 +75,7 @@ This project demonstrates a **complete MLOps lifecycle** — from raw data inges
 | Service               | URL                                                                                           | Status                                                              |
 | --------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | 🤗 Streamlit UI       | [crop-classifications.hf.space](https://huggingface.co/spaces/ozair1112/crop-classifications) | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
-| ⚡ FastAPI REST API   | [63.180.13.157:8001/docs](http://63.180.13.157:8001/docs)                                     | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
+| ⚡ FastAPI REST API   | [63.181.6.23:8001/docs](http://63.181.6.23:8001/docs)                                     | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
 | 🔬 MLflow Experiments | [DagsHub](https://dagshub.com/ushafique/CropClassification.mlflow)                            | ![Running](https://img.shields.io/badge/status-running-brightgreen) |
 
 ---

@@ -93,6 +93,7 @@ st.markdown("""
         overflow: hidden;
     }
 
+
     .metric-label {
         font-size: 0.8rem;
         color: rgba(255,255,255,0.72);

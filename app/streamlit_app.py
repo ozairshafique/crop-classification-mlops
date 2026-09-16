@@ -78,6 +78,7 @@ st.markdown("""
         border-radius: 12px;
         padding: 18px 12px;
         text-align: center;
+        overflow: hidden;
         transition: border-color 0.2s;
     }
 
@@ -88,11 +89,13 @@ st.markdown("""
         font-weight: 800;
         color: #22c55e;
         line-height: 1;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .metric-label {
-        font-size: 0.75rem;
-        color: rgba(255,255,255,0.5);
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.72);
         margin-top: 6px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -143,7 +146,7 @@ st.markdown("""
         border-bottom: 1px solid rgba(255,255,255,0.07);
     }
 
-    .divider-key { color: rgba(255,255,255,0.5); font-size: 0.875rem; }
+    .divider-key { color: rgba(255,255,255,0.5); font-size: 0.875rem; font-weight: 500; }
     .divider-value { color: #22c55e; font-weight: 600; font-size: 0.875rem; }
 
     .stButton > button {
@@ -177,12 +180,13 @@ st.markdown("""
     }
 
     /* Tick bar min/max — clean */
-    div[data-testid="stSliderTickBarMin"],
-    div[data-testid="stSliderTickBarMax"] {
+    div[data-testid="stTickBarMin"],
+    div[data-testid="stTickBarMax"] {
         background: transparent !important;
-        color: rgba(28,239,172,0.35) !important;
+        color: rgba(28,239,172,0.85) !important;
         border: none !important;
-        font-size: 0.78rem !important;
+        front-weight: 500 !important;
+        font-size: 0.8rem !important;
     }
 
     /* Target Streamlit's StyledThumbValue class */
@@ -201,7 +205,7 @@ st.markdown("""
     }
 
     h1, h2, h3, h4 { color: white !important; }
-    p, label { color: rgba(255,255,255,0.75) !important; }
+    p, label { color: rgba(255,255,255,0.8) !important; font-weight: 500 !important; }
 
     #MainMenu, footer, header { visibility: hidden; }
 
@@ -316,7 +320,7 @@ with st.sidebar:
     st.markdown("""
     <div style='padding: 8px 0 16px;'>
         <div style='font-size: 1.4rem; font-weight: 800; color: #22c55e;'>🌾 Crop AI</div>
-        <div style='font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 2px;'>
+        <div style='font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 2px;'>
             ML-Powered Crop Advisor
         </div>
     </div>
@@ -340,7 +344,7 @@ with st.sidebar:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown(f"""
-    <div style='color: rgba(255,255,255,0.35); font-size: 0.75rem; line-height: 1.9;'>
+    <div style='color: rgba(255,255,255,0.35); font-size: 0.78rem; line-height: 1.9;'>
         FastAPI + Streamlit<br>
         Deployed on AWS EC2<br>
         Random Forest · 22 Crops<br>
@@ -437,7 +441,7 @@ if page == "🌾  Predict":
         ' font-family="Inter,system-ui,sans-serif" font-size="44" font-weight="800"'
         ' fill="#22c55e">Crop Classification AI</text>'
         '<text x="600" y="112" text-anchor="middle"'
-        ' font-family="Inter,system-ui,sans-serif" font-size="15" fill="rgba(255,255,255,0.5)">'
+        ' font-family="Inter,system-ui,sans-serif" font-size="15" fill="rgba(255,255,255,0.8)">'
         'ML-Powered Agricultural Intelligence · Random Forest · 22 Crops'
         '</text>'
         # border
@@ -492,7 +496,7 @@ if page == "🌾  Predict":
         with col:
             st.markdown(f"""
             <div class='metric-card'>
-                <div class='metric-value' style='font-size:1.1rem'>{value:.1f}{unit}</div>
+                <div class='metric-value' style='font-size:0.95rem'>{value:.1f}{unit}</div>
                 <div class='metric-label'>{label}</div>
             </div>""", unsafe_allow_html=True)
 
